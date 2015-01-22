@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+textarea {
+  width: 100%;
+  height: 800px;
+}
+  </style>
+</head>
+<body>
+<textarea></textarea>
+<script type="text/jdists2">
+/*<jdists2>*/
+/*<jdists clean id='ttc' import="5.js" line4>*/
+console.log(line5);
+/*</jdists2>*/
+</script>
+<script type="text/jdists">line1
+line2
+/*<jdists import="6.js" line3 />*/
+/*<jdists clean id='ttc' import="5.js" line4>*/
+console.log(line5);
+/*</jdists>*/
+/*<remove line7>
+console.log(line8);
+</remove>*/
+(*<delphi line10>
+console.log(line11);
+</delphi>*)
+(*<delphi line13>*)
+console.log(line14);
+(*</delphi>*)
+'''<release line16>'''
+line14
+'''</release>'''
+'''<release line19>
+test
+/*<jdists import="line21.js">*/
+line17</release>'''
+/*<jdists import="line23.js">*/
+console.log(line19);
+/*</jdists>*/
+/*<jdists import="line26.js">*/
+  /*<jdists import="line27.js">*/
+    /*<jdists import="line28.js">*/console.log(4);/*</jdists>*/
+    /*<jdists import="line29.js">*/console.log(5);/*</jdists>*/
+    console.log(line30);
+  /*</jdists>*/
+line32/*</jdists>*/
+line33</script>
+<script src="../src/cbml.js"></script>
+<script>
+(function() {
+  var code = document.querySelector('script[type="text/jdists"]').innerHTML;
+  var tokens = cbml.tokenizer(code);
+  var tree = cbml.parse(code);
+  document.querySelector('textarea').value = code;
+
+  console.log(JSON.stringify(tree, null, '  '));
+  return;
+
+  var messages = [];
+  tokens.forEach(function(token) {
+    messages.push(token.line + ',' + token.col + ':『' + token.value + '』');
+  });
+  document.querySelector('textarea').value = messages.join('');
+
+  console.log('tokens: ' + JSON.stringify(
+    tokens,
+    null,
+    '  '
+  ));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "name": "cbml",
+  "version": "0.0.1",
+  "description": "CBML Parser",
+  "homepage": "https://github.com/cbml/cbmljs",
+  "author": "zswang<wjhu111@21cn.com>",
+  "repository": "https://github.com/cbml/cbmljs.git",
+  "license": "MIT",
+  "main": "src/cbml.js",
+  "files": [
+    "src/cbml.js",
+    "cli.js"
+  ],
+  "keywords": [
+    "cbml",
+    "parser",
+    "code",
+    "block"
+  ],
+  "dependencies": {
+    "colors": "1.0.3",
+    "optimist": "0.6.1"
+  },
+  "devDependencies": {
+    "mocha": "2.0.1",
+    "should": "4.1.0",
+    "uglify-js": "2.4.15",
+    "jdists": "0.1.10",
+    "jshint": "2.5.8"
+  },
+  "scripts": {
+    "test": "mocha -R spec && npm run coverage",
+    "dist": "jdists src/cbml.js -o cbml.js && uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
+    "lint": "jshint src/*.js"
+  },
+  "bin": {
+    "cbml": "cli.js"
+  }
+}

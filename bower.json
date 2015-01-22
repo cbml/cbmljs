@@ -1,0 +1,35 @@
+{
+  "name": "cbml",
+  "version": "0.0.1",
+  "homepage": "https://github.com/cbml/cbmljs",
+  "authors": [
+    "Zswang <wjhu111@21cn.com>"
+  ],
+  "description": "CBML Parser",
+  "main": "src/cbml.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "cbml",
+    "parse",
+    "code",
+    "block"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "seajs": "2.3.0",
+    "requirejs": "2.1.15"
+  },
+  "ignore": [
+    "tests",
+    "src",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "test",
+    "tests"
+  ]
+}
