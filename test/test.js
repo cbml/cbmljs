@@ -18,7 +18,7 @@ describe('fixtures', function() {
         return;
       }
       assert.equal(
-        JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input)))),
+        JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '),
         String(fs.readFileSync(path.join(dirname, output)))
       );
     });
