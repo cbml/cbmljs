@@ -31,3 +31,6 @@ console.log(line19);
   /*</jdists>*/
 line32/*</jdists>*/
 line33
+--[[<lua>]]
+line35 = {}
+--[[</lua>]]

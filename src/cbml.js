@@ -107,7 +107,7 @@
     while (S.pos < S.text.length) {
       // find tagName // 「<!--jdists」-->
       var match = S.text.substring(S.pos).match(
-        /(<!--|\/\*<|\(\*<|'''<)\s*(\/?)([\w_-]+)\s*/
+        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)\s*(\/?)([\w_-]+)\s*/
       );
       if (!match) {
         break;
@@ -138,6 +138,10 @@
         case "'''<":
           find = /^\s*(\/?>''')/;
           language = 'python';
+          break;
+        case "--[[<":
+          find = /^\s*(\/?>\]\])/;
+          language = 'lua';
           break;
       }
 
@@ -204,6 +208,9 @@
           case "python":
             find = /^\s*(\/?>'''|>)/;
             break;
+          case 'lua':
+            find = /^\s*(\/?>\]\]|>)/;
+            break;
         }
 
         match = S.text.substring(S.pos + offset).match(
@@ -228,6 +235,9 @@
               break;
             case 'python':
               left += ">'''";
+              break;
+            case 'lua':
+              left += ']';
               break;
           }
 

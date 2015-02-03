@@ -43,7 +43,7 @@ var contents = [];
 var filenames = [];
 argv._.forEach(function(filename) {
   filenames.push(filename);
-  contents.push(JSON.stringify(cbml.parse(fs.readFileSync(filename), argv)));
+  contents.push(JSON.stringify(cbml.parse(fs.readFileSync(filename), argv), null, '  '));
 });
 var content = contents.join('\n');
 if (argv.output) {
