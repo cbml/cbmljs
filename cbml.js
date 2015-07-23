@@ -44,6 +44,8 @@
    * @return {Array} 返回处理后语法数组
    */
   function tokenizer(code, options) {
+    code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
+        .replace(/^\uFEFF/, ''); // 数据清洗
     options = options || {};
     /**
      * 语法块
@@ -94,8 +96,7 @@
     }
 
     var S = { // 扫描的信息
-      text: String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
-        .replace(/^\uFEFF/, ''), // 数据清洗
+      text: code,
       pos: 0 // 扫描位置
     };
 
@@ -106,7 +107,7 @@
     while (S.pos < S.text.length) {
       // find tagName // 「<!--jdists」-->
       var match = S.text.substring(S.pos).match(
-        /(<!--|\/\*<|\(\*<|'''<)\s*(\/?)([\w_-]+)\s*/
+        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)\s*(\/?)([\w_-]+)\s*/
       );
       if (!match) {
         break;
@@ -137,6 +138,10 @@
         case "'''<":
           find = /^\s*(\/?>''')/;
           language = 'python';
+          break;
+        case "--[[<":
+          find = /^\s*(\/?>\]\])/;
+          language = 'lua';
           break;
       }
 
@@ -203,6 +208,9 @@
           case "python":
             find = /^\s*(\/?>'''|>)/;
             break;
+          case 'lua':
+            find = /^\s*(\/?>\]\]|>)/;
+            break;
         }
 
         match = S.text.substring(S.pos + offset).match(
@@ -228,15 +236,18 @@
             case 'python':
               left += ">'''";
               break;
+            case 'lua':
+              left += ']';
+              break;
           }
 
           var pos = S.text.substring(S.pos + offset).indexOf(left);
           if (pos >= 0) {
-            offset += pos + left.length;
-            pushToken('comment', S.pos, S.pos + offset, {
+            pushToken('comment', S.pos, S.pos + offset + pos + left.length, {
               tag: tag,
               language: language,
-              attrs: attrs
+              attrs: attrs,
+              content: S.text.slice(S.pos + offset, S.pos + offset + pos)
             });
           }
         }
@@ -285,6 +296,7 @@
     if (!code) {
       return;
     }
+    code = String(code);
 
     var root = {
       type: 'cbml',

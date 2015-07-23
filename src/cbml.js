@@ -44,7 +44,8 @@
    * @return {Array} 返回处理后语法数组
    */
   function tokenizer(code, options) {
-    code = String(code);
+    code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
+        .replace(/^\uFEFF/, ''); // 数据清洗
     options = options || {};
     /**
      * 语法块
@@ -95,8 +96,7 @@
     }
 
     var S = { // 扫描的信息
-      text: String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
-        .replace(/^\uFEFF/, ''), // 数据清洗
+      text: code,
       pos: 0 // 扫描位置
     };
 

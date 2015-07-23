@@ -30,12 +30,12 @@ var argv = optimist
 
 if (argv.version) {
   var json = require("../package.json");
-  util.puts(json.name + ' ' + json.version);
+  console.log(json.name + ' ' + json.version);
   return;
 }
 
 if (argv._.length < 1) {
-  util.puts('The input file is not specified.');
+  console.error('The input file is not specified.');
   return;
 }
 
@@ -49,7 +49,7 @@ var content = contents.join('\n');
 if (argv.output) {
   forceDirSync(path.dirname(argv.output));
   fs.writeFileSync(argv.output, content);
-  util.puts(util.format('%j cbml output complete.', filenames));
+  console.log(util.format('%j cbml output complete.', filenames));
 } else {
   console.log(content);
 }
