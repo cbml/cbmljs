@@ -1,10 +1,8 @@
 {
   "name": "cbml",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/cbml/cbmljs",
-  "authors": [
-    "Zswang <wjhu111@21cn.com>"
-  ],
+  "authors": "zswang<wjhu111@21cn.com>",
   "description": "CBML Parser",
   "main": "src/cbml.js",
   "moduleType": [

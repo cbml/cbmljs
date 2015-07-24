@@ -1,4 +1,4 @@
-(function(exportName) {
+(function (exportName) {
 
   'use strict';
 
@@ -28,7 +28,7 @@
   function decodeHTML(html) {
     return String(html).replace(
       /&((quot|lt|gt|amp|nbsp)|#x([a-f\d]+)|#(\d+));/ig,
-      function(all, group, key, hex, dec) {
+      function (all, group, key, hex, dec) {
         return key ? htmlDecodeDict[key.toLowerCase()] :
           hex ? String.fromCharCode(parseInt(hex, 16)) :
           String.fromCharCode(parseInt(dec, 10));
@@ -45,7 +45,7 @@
    */
   function tokenizer(code, options) {
     code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
-        .replace(/^\uFEFF/, ''); // 数据清洗
+      .replace(/^\uFEFF/, ''); // 数据清洗
     options = options || {};
     /**
      * 语法块
@@ -105,10 +105,12 @@
     //</debug>*/
 
     while (S.pos < S.text.length) {
-      // find tagName // 「<!--jdists」-->
+      // find tagName // 「《！--jdists」--》
+
       var match = S.text.substring(S.pos).match(
-        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)\s*(\/?)([\w_-]+)\s*/
+        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)(\/?)([\w_-]+)\s*|(<\/)([\w_-]+)(>\*\/|>\*\)|>'''|>\]\]|-->)/
       );
+
       if (!match) {
         break;
       }
@@ -122,31 +124,59 @@
 
       var find; // find end
 
-      switch (match[1]) {
-        case '<!--':
-          find = /^\s*(\/?-->)/;
+      if (!tag) {
+        tag = match[5];
+        switch (match[6]) {
+        case '-->':
           language = 'xml';
           break;
-        case '/*<':
-          find = /^\s*(\/?>\*\/)/;
+        case '>*/':
           language = 'c';
           break;
-        case '(*<':
-          find = /^\s*(\/?>\*\))/;
+        case '>*)':
           language = 'pascal';
           break;
-        case "'''<":
-          find = /^\s*(\/?>''')/;
+        case ">'''":
           language = 'python';
           break;
-        case "--[[<":
-          find = /^\s*(\/?>\]\])/;
+        case ">]]":
           language = 'lua';
           break;
+        }
+
+        pushToken('commentRight', S.pos, S.pos + offset, {
+          tag: tag,
+          language: language
+        });
+
+        continue;
       }
 
-      if (match[2] === '/') { // 闭合便签 // <!--「/」jdists-->
-        match = S.text.substring(S.pos + offset).match( // <!--/jdists「-->」
+      switch (match[1]) {
+      case '<!--':
+        find = /^\s*(\/?-->)/;
+        language = 'xml';
+        break;
+      case '/*<':
+        find = /^\s*(\/?>\*\/)/;
+        language = 'c';
+        break;
+      case '(*<':
+        find = /^\s*(\/?>\*\))/;
+        language = 'pascal';
+        break;
+      case "'''<":
+        find = /^\s*(\/?>''')/;
+        language = 'python';
+        break;
+      case "--[[<":
+        find = /^\s*(\/?>\]\])/;
+        language = 'lua';
+        break;
+      }
+
+      if (match[2] === '/') { // 闭合便签 // 《！--「/」jdists--》
+        match = S.text.substring(S.pos + offset).match( // 《！--/jdists「--》」
           find
         );
 
@@ -161,7 +191,7 @@
         });
 
       }
-      else { // 属性 // <!--/jdists「file="1.js" clean」-->」
+      else { // 属性 // 《！--/jdists「file="1.js" clean」--》」
 
         // find attrs
         while (true) {
@@ -187,69 +217,53 @@
             attrValue = match[1];
           }
           switch (attrValue[0]) {
-            case '"':
-            case "'":
-              attrValue = attrValue.slice(1, -1);
-              break;
+          case '"':
+          case "'":
+            attrValue = attrValue.slice(1, -1);
+            break;
           }
           attrs[attrName] = decodeHTML(attrValue);
         }
 
         switch (language) {
-          case 'xml':
-            find = /^\s*(\/?-->|>)/;
-            break;
-          case 'c':
-            find = /^\s*(\/?>\*\/|>)/;
-            break;
-          case 'pascal':
-            find = /^\s*(\/?>\*\)|>)/;
-            break;
-          case "python":
-            find = /^\s*(\/?>'''|>)/;
-            break;
-          case 'lua':
-            find = /^\s*(\/?>\]\]|>)/;
-            break;
+        case 'xml':
+          find = /^\s*(\/?-->|>)/;
+          break;
+        case 'c':
+          find = /^\s*(\/?>\*\/|>)/;
+          break;
+        case 'pascal':
+          find = /^\s*(\/?>\*\)|>)/;
+          break;
+        case "python":
+          find = /^\s*(\/?>'''|>)/;
+          break;
+        case 'lua':
+          find = /^\s*(\/?>\]\]|>)/;
+          break;
         }
 
         match = S.text.substring(S.pos + offset).match(
           find
         );
         if (!match) {
-          throw new Error('parse error.');
+
+          var buffer = code.slice(0, S.pos + offset).split('\n');
+          var line = buffer.length;
+          var col = buffer[buffer.length - 1].length + 1;
+
+          throw 'parse error. (line:' + line + ' col:' + col + ')';
         }
         offset += match[0].length;
-        var left = '';
-        if (match[1] === '>') { // 需要闭合 // <!--/jdists>...</jdists-->」
-          left += '</' + tag;
-          switch (language) {
-            case 'xml':
-              left += '-->';
-              break;
-            case 'c':
-              left += '>*/';
-              break;
-            case 'pascal':
-              left += '>*)';
-              break;
-            case 'python':
-              left += ">'''";
-              break;
-            case 'lua':
-              left += ']';
-              break;
-          }
-
-          var pos = S.text.substring(S.pos + offset).indexOf(left);
-          if (pos >= 0) {
-            pushToken('comment', S.pos, S.pos + offset + pos + left.length, {
+        if (match[1] === '>') { // 需要闭合 // 《！--/jdists》...《/jdists--》」
+          pushToken('commentLeft',
+            S.pos,
+            S.pos + offset, {
               tag: tag,
               language: language,
-              attrs: attrs,
-              content: S.text.slice(S.pos + offset, S.pos + offset + pos)
-            });
-          }
+              attrs: attrs
+            }
+          );
         }
         else {
           pushToken(match[1][0] === '/' ? 'single' : 'left',
@@ -278,7 +292,7 @@
   function nodesContent(nodes) {
     var result = '';
     if (nodes) {
-      nodes.forEach(function(node) {
+      nodes.forEach(function (node) {
         return result += node.value;
       });
     }
@@ -304,59 +318,92 @@
     };
     var current = root;
     var tokens = tokenizer(code, options);
+    /*<debug>
+    console.log(JSON.stringify(tokens, null, '  '));
+    //</debug>*/
     var lefts = [];
-    tokens.forEach(function(token) {
+    var commentLefts = [];
+    var items = [];
+    tokens.forEach(function (token) {
       switch (token.type) {
-        case 'single':
-        case 'comment':
-        case 'text':
-          current.nodes.push(token);
-          if (root !== current) {
-            current.value += token.value;
-          }
-          current.endpos = token.endpos;
-          break;
-        case 'left':
-          token.nodes = [];
-          lefts.push(token);
-          current.nodes.push(token);
-          current = token;
-          break;
-        case 'right':
-          for (var i = lefts.length - 1; i >= 0; i--) {
-            var curr = lefts[i];
-            var prev = lefts[i - 1];
-            if (curr.tag === token.tag && curr.language === token.language) {
-              curr.type = 'block';
-              curr.value += token.value;
-              curr.endpos = token.endpos;
-              curr.content = nodesContent(curr.nodes);
+      case 'single':
+      case 'text':
+        current.nodes.push(token);
+        if (root !== current) {
+          current.value += token.value;
+        }
+        current.endpos = token.endpos;
+        break;
+      case 'commentLeft':
+      case 'left':
+        if (token.type === 'left') {
+          items = lefts;
+        }
+        else {
+          items = commentLefts;
+        }
+        token.nodes = [];
+        items.push(token);
+        current.nodes.push(token);
+        current = token;
+        break;
+      case 'commentRight':
+        if (token.type === 'right') {
+          items = lefts;
+        }
+        else {
+          items = commentLefts;
+        }
+        for (var i = items.length - 1; i >= 0; i--) {
+          var curr = items[i];
+          var prev = items[i - 1];
+          if (curr.tag === token.tag && curr.language === token.language) {
+            curr.type = 'block';
 
-              if (prev) {
-                current = prev;
-                current.value += curr.value;
-              }
-              else {
-                current = root;
-              }
-              current.endpos = curr.endpos;
-              lefts = lefts.slice(0, i);
-              break;
+            curr.value += token.value;
+            curr.endpos = token.endpos;
+            curr.content = nodesContent(curr.nodes);
+
+            if (prev) {
+              current = prev;
+              current.value += curr.value;
             }
-            else { // 不匹配的开始。。。
-              if (!prev) {
-                throw new Error('parse error.');
-              }
-              curr.type = 'text';
-              delete curr.nodes; // 移除子节点
-              delete curr.tag;
-              delete curr.attrs;
-              delete curr.language;
-              prev.value += curr.value;
-              prev.endpos = curr.endpos;
+            else {
+              current = root;
             }
+            current.endpos = curr.endpos;
+
+            // 计算前缀和后缀
+            if (curr.nodes && curr.nodes.length) {
+              var begin = curr.nodes[0];
+              var end = curr.nodes[curr.nodes.length - 1];
+              curr.prefix = curr.value.slice(0, begin.pos - curr.pos);
+              curr.suffix = curr.value.slice(-(curr.endpos - end.endpos));
+            }
+
+            items = items.slice(0, i);
+            break;
           }
-          break;
+          else { // 不匹配的开始。。。
+            if (!prev) {
+              throw new Error('parse error.');
+            }
+            curr.type = 'text';
+            delete curr.nodes; // 移除子节点
+            delete curr.tag;
+            delete curr.attrs;
+            delete curr.language;
+            prev.value += curr.value;
+            prev.endpos = curr.endpos;
+          }
+        }
+        if (token.type === 'right') {
+          lefts = items;
+        }
+        else {
+          commentLefts = items;
+        }
+        break;
       }
     });
 
@@ -384,7 +431,7 @@
   /* exported exports */
   if (typeof define === 'function') {
     if (define.amd || define.cmd) {
-      define(function() {
+      define(function () {
         return exports;
       });
     }

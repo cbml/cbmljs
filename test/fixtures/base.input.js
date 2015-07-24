@@ -1,4 +1,5 @@
 <!--ok>line1
+/*<jdists>*/line1.2/*</jdists>*/
 line2</ok-->
 /*<jdists import="6.js" line3 />*/
 /*<jdists clean id='ttc' import="5.js" line4>*/
