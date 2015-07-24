@@ -348,6 +348,7 @@
         current = token;
         break;
       case 'commentRight':
+      case 'right':
         if (token.type === 'right') {
           items = lefts;
         }
