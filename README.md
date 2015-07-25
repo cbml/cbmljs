@@ -4,7 +4,9 @@
 
 ## Struct
 
-```json
+![cbml](https://cloud.githubusercontent.com/assets/536587/8889268/b5f8a5aa-3305-11e5-8f3d-6af1ccbf1474.png)
+
+```js
 {
     "type": "block", // token type : "text" | "block" | "single"
     "pos": 7, // Starting position
