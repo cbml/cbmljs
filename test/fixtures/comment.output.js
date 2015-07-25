@@ -6,6 +6,7 @@
       "pos": 0,
       "endpos": 102,
       "value": "<!--relpace encoding=\"quoted\">\nline3\n/*<jdists encoding=\"base64\">\nline4\n</jdists>*/\nline2\n</relpace-->",
+      "comment": true,
       "tag": "relpace",
       "language": "xml",
       "attrs": {
@@ -27,6 +28,7 @@
           "pos": 37,
           "endpos": 83,
           "value": "/*<jdists encoding=\"base64\">\nline4\n</jdists>*/",
+          "comment": true,
           "tag": "jdists",
           "language": "c",
           "attrs": {

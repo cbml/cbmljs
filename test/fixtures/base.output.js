@@ -5,7 +5,8 @@
       "type": "block",
       "pos": 0,
       "endpos": 58,
-      "value": "<!--ok>line1\n</ok-->",
+      "value": "<!--ok>line1\n/*<jdists>*/line1.2/*</jdists>*/\nline2</ok-->",
+      "comment": true,
       "tag": "ok",
       "language": "xml",
       "attrs": {},
@@ -43,19 +44,19 @@
           "content": "line1.2",
           "prefix": "/*<jdists>*/",
           "suffix": "/*</jdists>*/"
+        },
+        {
+          "type": "text",
+          "pos": 45,
+          "endpos": 51,
+          "value": "\nline2",
+          "line": 2,
+          "col": 33
         }
       ],
-      "content": "line1\n/*<jdists>*/line1.2/*</jdists>*/",
+      "content": "line1\n/*<jdists>*/line1.2/*</jdists>*/\nline2",
       "prefix": "<!--ok>",
-      "suffix": "line1\n</ok-->"
-    },
-    {
-      "type": "text",
-      "pos": 45,
-      "endpos": 51,
-      "value": "\nline2",
-      "line": 2,
-      "col": 33
+      "suffix": "</ok-->"
     },
     {
       "type": "text",
@@ -129,6 +130,7 @@
       "pos": 176,
       "endpos": 224,
       "value": "/*<remove line7>\nconsole.log(line8);\n</remove>*/",
+      "comment": true,
       "tag": "remove",
       "language": "c",
       "attrs": {
@@ -163,6 +165,7 @@
       "pos": 225,
       "endpos": 275,
       "value": "(*<delphi line10>\nconsole.log(line11);\n</delphi>*)",
+      "comment": true,
       "tag": "delphi",
       "language": "pascal",
       "attrs": {
@@ -264,7 +267,8 @@
       "type": "block",
       "pos": 378,
       "endpos": 454,
-      "value": "'''<release line19>\ntest\n</release>'''",
+      "value": "'''<release line19>\ntest\n/*<jdists import=\"line21.js\">*/\nline17</release>'''",
+      "comment": true,
       "tag": "release",
       "language": "python",
       "attrs": {
@@ -284,8 +288,8 @@
         {
           "type": "text",
           "pos": 403,
-          "endpos": 820,
-          "value": "/*<jdists import=\"line21.js\">*/\nline17/*<jdists import=\"line23.js\">*/\nconsole.log(line19);\n/*</jdists>*/\n/*<jdists import=\"line26.js\">*/\n  /*<jdists import=\"line27.js\">*/\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  /*</jdists>*/\nline32/*</jdists>*/\nline33\n--[[<lua>]]\nline35 = {}\n--[[</lua>]]",
+          "endpos": 441,
+          "value": "/*<jdists import=\"line21.js\">*/\nline17",
           "line": 22,
           "col": 1
         }
@@ -327,6 +331,174 @@
       "content": "\nconsole.log(line19);\n",
       "prefix": "/*<jdists import=\"line23.js\">*/",
       "suffix": "/*</jdists>*/"
+    },
+    {
+      "type": "text",
+      "pos": 521,
+      "endpos": 522,
+      "value": "\n",
+      "line": 26,
+      "col": 14
+    },
+    {
+      "type": "block",
+      "pos": 522,
+      "endpos": 776,
+      "value": "/*<jdists import=\"line26.js\">*/\n  /*<jdists import=\"line27.js\">*/\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  /*</jdists>*/\nline32/*</jdists>*/",
+      "tag": "jdists",
+      "language": "c",
+      "attrs": {
+        "import": "line26.js"
+      },
+      "line": 27,
+      "col": 1,
+      "nodes": [
+        {
+          "type": "text",
+          "pos": 553,
+          "endpos": 556,
+          "value": "\n  ",
+          "line": 27,
+          "col": 32
+        },
+        {
+          "type": "block",
+          "pos": 556,
+          "endpos": 756,
+          "value": "/*<jdists import=\"line27.js\">*/\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  /*</jdists>*/",
+          "tag": "jdists",
+          "language": "c",
+          "attrs": {
+            "import": "line27.js"
+          },
+          "line": 28,
+          "col": 3,
+          "nodes": [
+            {
+              "type": "text",
+              "pos": 587,
+              "endpos": 592,
+              "value": "\n    ",
+              "line": 28,
+              "col": 34
+            },
+            {
+              "type": "block",
+              "pos": 592,
+              "endpos": 651,
+              "value": "/*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/",
+              "tag": "jdists",
+              "language": "c",
+              "attrs": {
+                "import": "line28.js"
+              },
+              "line": 29,
+              "col": 5,
+              "nodes": [
+                {
+                  "type": "text",
+                  "pos": 623,
+                  "endpos": 638,
+                  "value": "console.log(4);",
+                  "line": 29,
+                  "col": 36
+                }
+              ],
+              "content": "console.log(4);",
+              "prefix": "/*<jdists import=\"line28.js\">*/",
+              "suffix": "/*</jdists>*/"
+            },
+            {
+              "type": "text",
+              "pos": 651,
+              "endpos": 656,
+              "value": "\n    ",
+              "line": 29,
+              "col": 64
+            },
+            {
+              "type": "block",
+              "pos": 656,
+              "endpos": 715,
+              "value": "/*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/",
+              "tag": "jdists",
+              "language": "c",
+              "attrs": {
+                "import": "line29.js"
+              },
+              "line": 30,
+              "col": 5,
+              "nodes": [
+                {
+                  "type": "text",
+                  "pos": 687,
+                  "endpos": 702,
+                  "value": "console.log(5);",
+                  "line": 30,
+                  "col": 36
+                }
+              ],
+              "content": "console.log(5);",
+              "prefix": "/*<jdists import=\"line29.js\">*/",
+              "suffix": "/*</jdists>*/"
+            },
+            {
+              "type": "text",
+              "pos": 715,
+              "endpos": 743,
+              "value": "\n    console.log(line30);\n  ",
+              "line": 30,
+              "col": 64
+            }
+          ],
+          "content": "\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  ",
+          "prefix": "/*<jdists import=\"line27.js\">*/",
+          "suffix": "/*</jdists>*/"
+        },
+        {
+          "type": "text",
+          "pos": 756,
+          "endpos": 763,
+          "value": "\nline32",
+          "line": 32,
+          "col": 16
+        }
+      ],
+      "content": "\n  /*<jdists import=\"line27.js\">*/\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  /*</jdists>*/\nline32",
+      "prefix": "/*<jdists import=\"line26.js\">*/",
+      "suffix": "/*</jdists>*/"
+    },
+    {
+      "type": "text",
+      "pos": 776,
+      "endpos": 784,
+      "value": "\nline33\n",
+      "line": 33,
+      "col": 20
+    },
+    {
+      "type": "block",
+      "pos": 784,
+      "endpos": 820,
+      "value": "--[[<lua>]]\nline35 = {}\n--[[</lua>]]",
+      "tag": "lua",
+      "language": "lua",
+      "attrs": {},
+      "line": 35,
+      "col": 1,
+      "nodes": [
+        {
+          "type": "text",
+          "pos": 795,
+          "endpos": 808,
+          "value": "\nline35 = {}\n",
+          "line": 35,
+          "col": 12
+        }
+      ],
+      "content": "\nline35 = {}\n",
+      "prefix": "--[[<lua>]]",
+      "suffix": "--[[</lua>]]"
     }
   ],
   "endpos": 820

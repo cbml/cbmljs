@@ -2,6 +2,27 @@
 
 > CBML Parser
 
+## Struct
+
+```json
+{
+    "type": "block", // token type : "text" | "block" | "single"
+    "pos": 7, // Starting position
+    "endpos": 333, // End position
+    "value": "/*<jdists>*/.../*</jdists>*/", // All value // as "{{prefix}}" + "{{content}}" + "{{suffix}}"
+    "tag": "jdists", // tag name
+    "language": "c", // language : "c" | "pascal" | "python" | "lua"
+    "attrs": {},
+	"line": 1, // Line Numbers
+	"col": 8 // Column number
+    "nodes": [
+       ...
+    ],
+	"content": "...",
+	"prefix": "/*<jdists>*/",
+	"suffix": "/*</jdists>*/"
+}
+```
 
 ## Install
 

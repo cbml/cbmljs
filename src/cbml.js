@@ -144,7 +144,8 @@
           break;
         }
 
-        pushToken('commentRight', S.pos, S.pos + offset, {
+        pushToken('right', S.pos, S.pos + offset, {
+          comment: true,
           tag: tag,
           language: language
         });
@@ -256,9 +257,10 @@
         }
         offset += match[0].length;
         if (match[1] === '>') { // 需要闭合 // 《！--/jdists》...《/jdists--》」
-          pushToken('commentLeft',
+          pushToken('left',
             S.pos,
             S.pos + offset, {
+              comment: true,
               tag: tag,
               language: language,
               attrs: attrs
@@ -321,9 +323,7 @@
     /*<debug>
     console.log(JSON.stringify(tokens, null, '  '));
     //</debug>*/
-    var lefts = [];
-    var commentLefts = [];
-    var items = [];
+    var lefts = []; // 左边标签集合，用于寻找配对的右边标签
     tokens.forEach(function (token) {
       switch (token.type) {
       case 'single':
@@ -334,31 +334,19 @@
         }
         current.endpos = token.endpos;
         break;
-      case 'commentLeft':
       case 'left':
-        if (token.type === 'left') {
-          items = lefts;
-        }
-        else {
-          items = commentLefts;
-        }
         token.nodes = [];
-        items.push(token);
+        lefts.push(token);
         current.nodes.push(token);
         current = token;
         break;
-      case 'commentRight':
       case 'right':
-        if (token.type === 'right') {
-          items = lefts;
-        }
-        else {
-          items = commentLefts;
-        }
-        for (var i = items.length - 1; i >= 0; i--) {
-          var curr = items[i];
-          var prev = items[i - 1];
-          if (curr.tag === token.tag && curr.language === token.language) {
+        for (var i = lefts.length - 1; i >= 0; i--) {
+          var curr = lefts[i];
+          var prev = lefts[i - 1];
+          if (curr.tag === token.tag &&
+            curr.language === token.language &&
+            curr.comment === token.comment) {
             curr.type = 'block';
 
             curr.value += token.value;
@@ -382,7 +370,7 @@
               curr.suffix = curr.value.slice(-(curr.endpos - end.endpos));
             }
 
-            items = items.slice(0, i);
+            lefts = lefts.slice(0, i);
             break;
           }
           else { // 不匹配的开始。。。
@@ -397,12 +385,6 @@
             prev.value += curr.value;
             prev.endpos = curr.endpos;
           }
-        }
-        if (token.type === 'right') {
-          lefts = items;
-        }
-        else {
-          commentLefts = items;
         }
         break;
       }
