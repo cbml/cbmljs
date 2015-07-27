@@ -108,12 +108,13 @@
       // find tagName // 「《！--jdists」--》
 
       var match = S.text.substring(S.pos).match(
-        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)(\/?)([\w_-]+)\s*|(<\/)([\w_-]+)(>\*\/|>\*\)|>'''|>\]\]|-->)/
+        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)(\/?)([\w_]+[\w_-]*[\w_]|[\w_]+)\s*|(<\/)([\w_]+[\w_-]*[\w_]|[\w_]+)(>\*\/|>\*\)|>'''|>\]\]|-->)/
       );
 
       if (!match) {
         break;
       }
+
       pushToken('text', S.pos, S.pos + match.index); // 记录 text
 
       var tag = match[3];
@@ -198,7 +199,7 @@
         while (true) {
           // find attrName
           match = S.text.substring(S.pos + offset).match(
-            /^\s*([\w_-]+)\s*/
+            /^\s*([\w_]+[\w_-]*[\w_]|[\w_]+)\s*/
           );
           if (!match) {
             break;
@@ -247,6 +248,7 @@
         match = S.text.substring(S.pos + offset).match(
           find
         );
+
         if (!match) {
 
           var buffer = code.slice(0, S.pos + offset).split('\n');
