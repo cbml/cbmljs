@@ -4,7 +4,7 @@
   "homepage": "https://github.com/cbml/cbmljs",
   "authors": "zswang<wjhu111@21cn.com>",
   "description": "CBML Parser",
-  "main": "src/cbml.js",
+  "main": "cbml.js",
   "moduleType": [
     "globals",
     "node"
