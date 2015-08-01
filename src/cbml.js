@@ -5,11 +5,24 @@
   /* global exports */
   var exports = exports || {};
 
+  /*<jdists encoding="ejs" data="../package.json">*/
   /**
-   * CBML 解析器
+   * @file <%- name %>
    *
-   * @author 王集鹄(wangjihu,http://weibo.com/zswang)
+   * <%- description %>
+   * @author
+       <% (author instanceof Array ? author : [author]).forEach(function (item) { %>
+   *   <%- item.name %> (<%- item.url %>)
+       <% }); %>
+   * @version <%- version %>
+       <% var now = new Date() %>
+   * @date <%- [
+        now.getFullYear(),
+        now.getMonth() + 101,
+        now.getDate() + 100
+      ].join('-').replace(/-1/g, '-') %>
    */
+  /*</jdists>*/
 
   var htmlDecodeDict = {
     'quot': '"',
@@ -37,6 +50,23 @@
   }
 
   /**
+   * 突出显示错误的代码行
+   *
+   * @param {Array} buffer 从开始位置到错误位置的代码行
+   * @param {number} count 样本行数
+   */
+  function lightcode(buffer, count) {
+    var len = buffer.length.toString().length;
+    var lines = buffer.slice(-(count || 5));
+    for (var i = lines.length - 1; i >= 0; i--) {
+      var l = (buffer.length + i - lines.length + 1).toString();
+      l = (new Array(len - l.length + 1)).join(' ') + l; // 前面补空格
+      lines[i] = l + (i === lines.length - 1 ? ' > ' : '   ') + '| ' + lines[i];
+    }
+    console.log(lines.join('\n'));
+  }
+
+  /**
    * CBML 语法元素抽取
    *
    * @param {string} code 代码文本
@@ -44,8 +74,6 @@
    * @return {Array} 返回处理后语法数组
    */
   function tokenizer(code, options) {
-    code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
-      .replace(/^\uFEFF/, ''); // 数据清洗
     options = options || {};
     /**
      * 语法块
@@ -177,13 +205,23 @@
         break;
       }
 
+      var buffer;
+      var line;
+      var col;
+      var error;
       if (match[2] === '/') { // 闭合便签 // 《！--「/」jdists--》
         match = S.text.substring(S.pos + offset).match( // 《！--/jdists「--》」
           find
         );
 
         if (!match) {
-          throw new Error('parse error.');
+          buffer = code.slice(0, S.pos + offset).split('\n');
+          line = buffer.length;
+          col = buffer[buffer.length - 1].length + 1;
+          lightcode(buffer, 5);
+          error = 'Uncaught SyntaxError: Can\'t match "' + find + '". (line:' + line + ' col:' + col + ')';
+          console.error(error);
+          throw error;
         }
         offset += match[0].length;
 
@@ -250,12 +288,14 @@
         );
 
         if (!match) {
+          buffer = code.slice(0, S.pos + offset).split('\n');
+          line = buffer.length;
+          col = buffer[buffer.length - 1].length + 1;
 
-          var buffer = code.slice(0, S.pos + offset).split('\n');
-          var line = buffer.length;
-          var col = buffer[buffer.length - 1].length + 1;
-
-          throw 'parse error. (line:' + line + ' col:' + col + ')';
+          lightcode(buffer, 5);
+          error = 'Uncaught SyntaxError: Can\'t match "' + find + '". (line:' + line + ' col:' + col + ')';
+          console.error(error);
+          throw error;
         }
         offset += match[0].length;
         if (match[1] === '>') { // 需要闭合 // 《！--/jdists》...《/jdists--》」
@@ -314,7 +354,8 @@
     if (!code) {
       return;
     }
-    code = String(code);
+    code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
+      .replace(/^\uFEFF/, ''); // 数据清洗
 
     var root = {
       type: 'cbml',
@@ -343,9 +384,23 @@
         current = token;
         break;
       case 'right':
+        var buffer;
+        var line;
+        var col;
+        var error;
+        if (lefts.length <= 0) {
+          buffer = code.slice(0, token.endpos).split('\n');
+          line = buffer.length;
+          col = buffer[buffer.length - 1].length + 1;
+          lightcode(buffer, 5);
+          error = 'No start tag. (line:' + token.line + ' col:' + token.col + ')';
+          console.error(error);
+          throw error;
+        }
         for (var i = lefts.length - 1; i >= 0; i--) {
           var curr = lefts[i];
           var prev = lefts[i - 1];
+
           if (curr.tag === token.tag &&
             curr.language === token.language &&
             curr.comment === token.comment) {
@@ -377,7 +432,13 @@
           }
           else { // 不匹配的开始。。。
             if (!prev) {
-              throw new Error('parse error.');
+              buffer = code.slice(0, token.endpos).split('\n');
+              line = buffer.length;
+              col = buffer[buffer.length - 1].length + 1;
+              lightcode(buffer, 5);
+              error = 'No start tag. (line:' + token.line + ' col:' + token.col + ')';
+              console.error(error);
+              throw error;
             }
             curr.type = 'text';
             delete curr.nodes; // 移除子节点
