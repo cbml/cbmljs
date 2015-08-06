@@ -1,6 +1,8 @@
 (function (exportName) {
 
+  /*<remove>*/
   'use strict';
+  /*</remove>*/
 
   /* global exports */
   var exports = exports || {};

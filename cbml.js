@@ -1,5 +1,4 @@
 (function (exportName) {
-  'use strict';
   /* global exports */
   var exports = exports || {};
   /**
@@ -8,8 +7,8 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.0.8
-   * @date 2015-08-01
+   * @version 0.0.9
+   * @date 2015-08-06
    */
   var htmlDecodeDict = {
     'quot': '"',

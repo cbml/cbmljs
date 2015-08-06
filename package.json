@@ -1,6 +1,6 @@
 {
   "name": "cbml",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "CBML Parser",
   "homepage": "https://github.com/cbml/cbmljs",
   "author": {
@@ -9,9 +9,9 @@
   },
   "repository": "https://github.com/cbml/cbmljs.git",
   "license": "MIT",
-  "main": "src/cbml.js",
+  "main": "cbml.js",
   "files": [
-    "src/cbml.js",
+    "cbml.js",
     "cli.js"
   ],
   "keywords": [
@@ -29,12 +29,12 @@
     "mocha": "2.0.1",
     "should": "4.1.0",
     "uglify-js": "2.4.15",
-    "jdists": "0.9.3",
+    "jdists": "0.9.9",
     "jshint": "2.5.8"
   },
   "scripts": {
     "test": "mocha -R spec",
-    "dist": "jdists src/cbml.js -o cbml.js -r debug && uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
+    "dist": "jdists src/cbml.js -o cbml.js -r remove,debug && uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
     "lint": "jshint src/cbml.js"
   },
   "bin": {
