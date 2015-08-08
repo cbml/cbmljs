@@ -27,13 +27,14 @@
   },
   "devDependencies": {
     "mocha": "2.0.1",
+    "istanbul": "0.3.17",
     "should": "4.1.0",
     "uglify-js": "2.4.15",
     "jdists": "0.9.9",
     "jshint": "2.5.8"
   },
   "scripts": {
-    "test": "mocha -R spec",
+    "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec",
     "dist": "jdists src/cbml.js -o cbml.js -r remove,debug && uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
     "lint": "jshint src/cbml.js"
   },

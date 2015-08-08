@@ -8,7 +8,7 @@
    * @author
    *   zswang (http://weibo.com/zswang)
    * @version 0.0.9
-   * @date 2015-08-06
+   * @date 2015-08-08
    */
   var htmlDecodeDict = {
     'quot': '"',
@@ -41,7 +41,7 @@
    */
   function lightcode(buffer, count) {
     var len = buffer.length.toString().length;
-    var lines = buffer.slice(-(count || 5));
+    var lines = buffer.slice(-count);
     for (var i = lines.length - 1; i >= 0; i--) {
       var l = (buffer.length + i - lines.length + 1).toString();
       l = (new Array(len - l.length + 1)).join(' ') + l; // 前面补空格

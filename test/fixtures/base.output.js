@@ -198,41 +198,41 @@
     {
       "type": "block",
       "pos": 276,
-      "endpos": 330,
-      "value": "(*<delphi line13>*)\nconsole.log(line14);\n(*</delphi>*)",
+      "endpos": 351,
+      "value": "(*<delphi line13=\"a&amp;b&#x33;&#32;\">*)\nconsole.log(line14);\n(*</delphi>*)",
       "tag": "delphi",
       "language": "pascal",
       "attrs": {
-        "line13": ""
+        "line13": "a&b3 "
       },
       "line": 14,
       "col": 1,
       "nodes": [
         {
           "type": "text",
-          "pos": 295,
-          "endpos": 317,
+          "pos": 316,
+          "endpos": 338,
           "value": "\nconsole.log(line14);\n",
           "line": 14,
-          "col": 20
+          "col": 41
         }
       ],
       "content": "\nconsole.log(line14);\n",
-      "prefix": "(*<delphi line13>*)",
+      "prefix": "(*<delphi line13=\"a&amp;b&#x33;&#32;\">*)",
       "suffix": "(*</delphi>*)"
     },
     {
       "type": "text",
-      "pos": 330,
-      "endpos": 331,
+      "pos": 351,
+      "endpos": 352,
       "value": "\n",
       "line": 16,
       "col": 14
     },
     {
       "type": "block",
-      "pos": 331,
-      "endpos": 377,
+      "pos": 352,
+      "endpos": 398,
       "value": "'''<release line16>'''\nline14\n'''</release>'''",
       "tag": "release",
       "language": "python",
@@ -244,8 +244,8 @@
       "nodes": [
         {
           "type": "text",
-          "pos": 353,
-          "endpos": 361,
+          "pos": 374,
+          "endpos": 382,
           "value": "\nline14\n",
           "line": 17,
           "col": 23
@@ -257,16 +257,16 @@
     },
     {
       "type": "text",
-      "pos": 377,
-      "endpos": 378,
+      "pos": 398,
+      "endpos": 399,
       "value": "\n",
       "line": 19,
       "col": 17
     },
     {
       "type": "block",
-      "pos": 378,
-      "endpos": 454,
+      "pos": 399,
+      "endpos": 475,
       "value": "'''<release line19>\ntest\n/*<jdists import=\"line21.js\">*/\nline17</release>'''",
       "comment": true,
       "tag": "release",
@@ -279,16 +279,16 @@
       "nodes": [
         {
           "type": "text",
-          "pos": 397,
-          "endpos": 403,
+          "pos": 418,
+          "endpos": 424,
           "value": "\ntest\n",
           "line": 20,
           "col": 20
         },
         {
           "type": "text",
-          "pos": 403,
-          "endpos": 441,
+          "pos": 424,
+          "endpos": 462,
           "value": "/*<jdists import=\"line21.js\">*/\nline17",
           "line": 22,
           "col": 1
@@ -300,16 +300,16 @@
     },
     {
       "type": "text",
-      "pos": 454,
-      "endpos": 455,
+      "pos": 475,
+      "endpos": 476,
       "value": "\n",
       "line": 23,
       "col": 20
     },
     {
       "type": "block",
-      "pos": 455,
-      "endpos": 521,
+      "pos": 476,
+      "endpos": 542,
       "value": "/*<jdists import=\"line23.js\">*/\nconsole.log(line19);\n/*</jdists>*/",
       "tag": "jdists",
       "language": "c",
@@ -321,8 +321,8 @@
       "nodes": [
         {
           "type": "text",
-          "pos": 486,
-          "endpos": 508,
+          "pos": 507,
+          "endpos": 529,
           "value": "\nconsole.log(line19);\n",
           "line": 24,
           "col": 32
@@ -334,16 +334,16 @@
     },
     {
       "type": "text",
-      "pos": 521,
-      "endpos": 522,
+      "pos": 542,
+      "endpos": 543,
       "value": "\n",
       "line": 26,
       "col": 14
     },
     {
       "type": "block",
-      "pos": 522,
-      "endpos": 776,
+      "pos": 543,
+      "endpos": 797,
       "value": "/*<jdists import=\"line26.js\">*/\n  /*<jdists import=\"line27.js\">*/\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  /*</jdists>*/\nline32/*</jdists>*/",
       "tag": "jdists",
       "language": "c",
@@ -355,16 +355,16 @@
       "nodes": [
         {
           "type": "text",
-          "pos": 553,
-          "endpos": 556,
+          "pos": 574,
+          "endpos": 577,
           "value": "\n  ",
           "line": 27,
           "col": 32
         },
         {
           "type": "block",
-          "pos": 556,
-          "endpos": 756,
+          "pos": 577,
+          "endpos": 777,
           "value": "/*<jdists import=\"line27.js\">*/\n    /*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/\n    /*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/\n    console.log(line30);\n  /*</jdists>*/",
           "tag": "jdists",
           "language": "c",
@@ -376,16 +376,16 @@
           "nodes": [
             {
               "type": "text",
-              "pos": 587,
-              "endpos": 592,
+              "pos": 608,
+              "endpos": 613,
               "value": "\n    ",
               "line": 28,
               "col": 34
             },
             {
               "type": "block",
-              "pos": 592,
-              "endpos": 651,
+              "pos": 613,
+              "endpos": 672,
               "value": "/*<jdists import=\"line28.js\">*/console.log(4);/*</jdists>*/",
               "tag": "jdists",
               "language": "c",
@@ -397,8 +397,8 @@
               "nodes": [
                 {
                   "type": "text",
-                  "pos": 623,
-                  "endpos": 638,
+                  "pos": 644,
+                  "endpos": 659,
                   "value": "console.log(4);",
                   "line": 29,
                   "col": 36
@@ -410,16 +410,16 @@
             },
             {
               "type": "text",
-              "pos": 651,
-              "endpos": 656,
+              "pos": 672,
+              "endpos": 677,
               "value": "\n    ",
               "line": 29,
               "col": 64
             },
             {
               "type": "block",
-              "pos": 656,
-              "endpos": 715,
+              "pos": 677,
+              "endpos": 736,
               "value": "/*<jdists import=\"line29.js\">*/console.log(5);/*</jdists>*/",
               "tag": "jdists",
               "language": "c",
@@ -431,8 +431,8 @@
               "nodes": [
                 {
                   "type": "text",
-                  "pos": 687,
-                  "endpos": 702,
+                  "pos": 708,
+                  "endpos": 723,
                   "value": "console.log(5);",
                   "line": 30,
                   "col": 36
@@ -444,8 +444,8 @@
             },
             {
               "type": "text",
-              "pos": 715,
-              "endpos": 743,
+              "pos": 736,
+              "endpos": 764,
               "value": "\n    console.log(line30);\n  ",
               "line": 30,
               "col": 64
@@ -457,8 +457,8 @@
         },
         {
           "type": "text",
-          "pos": 756,
-          "endpos": 763,
+          "pos": 777,
+          "endpos": 784,
           "value": "\nline32",
           "line": 32,
           "col": 16
@@ -470,16 +470,16 @@
     },
     {
       "type": "text",
-      "pos": 776,
-      "endpos": 784,
+      "pos": 797,
+      "endpos": 805,
       "value": "\nline33\n",
       "line": 33,
       "col": 20
     },
     {
       "type": "block",
-      "pos": 784,
-      "endpos": 820,
+      "pos": 805,
+      "endpos": 841,
       "value": "--[[<lua>]]\nline35 = {}\n--[[</lua>]]",
       "tag": "lua",
       "language": "lua",
@@ -489,8 +489,8 @@
       "nodes": [
         {
           "type": "text",
-          "pos": 795,
-          "endpos": 808,
+          "pos": 816,
+          "endpos": 829,
           "value": "\nline35 = {}\n",
           "line": 35,
           "col": 12
@@ -499,7 +499,40 @@
       "content": "\nline35 = {}\n",
       "prefix": "--[[<lua>]]",
       "suffix": "--[[</lua>]]"
+    },
+    {
+      "type": "text",
+      "pos": 841,
+      "endpos": 842,
+      "value": "\n",
+      "line": 37,
+      "col": 13
+    },
+    {
+      "type": "block",
+      "pos": 842,
+      "endpos": 870,
+      "value": "--[[<lua>line38 = {}</lua>]]",
+      "comment": true,
+      "tag": "lua",
+      "language": "lua",
+      "attrs": {},
+      "line": 38,
+      "col": 1,
+      "nodes": [
+        {
+          "type": "text",
+          "pos": 851,
+          "endpos": 862,
+          "value": "line38 = {}",
+          "line": 38,
+          "col": 10
+        }
+      ],
+      "content": "line38 = {}",
+      "prefix": "--[[<lua>",
+      "suffix": "</lua>]]"
     }
   ],
-  "endpos": 820
+  "endpos": 870
 }

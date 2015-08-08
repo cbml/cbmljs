@@ -11,7 +11,7 @@ console.log(line8);
 (*<delphi line10>
 console.log(line11);
 </delphi>*)
-(*<delphi line13>*)
+(*<delphi line13="a&amp;b&#x33;&#32;">*)
 console.log(line14);
 (*</delphi>*)
 '''<release line16>'''
@@ -35,3 +35,4 @@ line33
 --[[<lua>]]
 line35 = {}
 --[[</lua>]]
+--[[<lua>line38 = {}</lua>]]
