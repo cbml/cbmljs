@@ -18,6 +18,12 @@ cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
 cbml.parse('/*<cctv>*//*</cctv>*/');
 cbml.parse();
 
+describe('coverage', function() {
+  it('empty string', function () {
+    assert.equal(typeof cbml.parse(''), 'object');
+  })
+});
+
 describe('fixtures', function() {
   var dirname = 'test/fixtures';
   var items = fs.readdirSync(dirname).filter(function(item) {
@@ -37,5 +43,4 @@ describe('fixtures', function() {
       );
     });
   });
-
 });

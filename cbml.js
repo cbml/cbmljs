@@ -7,7 +7,7 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.0.9
+   * @version 0.1.0
    * @date 2015-08-23
    */
   var htmlDecodeDict = {
@@ -294,7 +294,11 @@
    */
   function parse(code, options) {
     if (!code) {
-      return;
+      return {
+        type: 'cbml',
+        nodes: [],
+        value: ''
+      };
     }
     code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
       .replace(/^\uFEFF/, ''); // 数据清洗

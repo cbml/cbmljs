@@ -354,7 +354,11 @@
    */
   function parse(code, options) {
     if (!code) {
-      return;
+      return {
+        type: 'cbml',
+        nodes: [],
+        value: ''
+      };
     }
     code = String(code).replace(/\r\n?|[\n\u2028\u2029]/g, '\n')
       .replace(/^\uFEFF/, ''); // 数据清洗
