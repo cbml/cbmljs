@@ -53,5 +53,5 @@ MIT © [zswang](http://weibo.com/zswang)
 [npm-image]: https://badge.fury.io/js/cbml.svg
 [travis-url]: https://travis-ci.org/cbml/cbmljs
 [travis-image]: https://travis-ci.org/cbml/cbmljs.svg?branch=master
-[coverage-url]: https://coveralls.io/github/zswang/jdists?branch=master
-[coverage-image]: https://coveralls.io/repos/zswang/jdists/badge.svg?branch=master&service=github
+[coverage-url]: https://coveralls.io/github/cbml/cbmljs?branch=master
+[coverage-image]: https://coveralls.io/repos/cbml/cbmljs/badge.svg?branch=master&service=github
