@@ -8,7 +8,7 @@
    * @author
    *   zswang (http://weibo.com/zswang)
    * @version 0.0.9
-   * @date 2015-08-08
+   * @date 2015-08-23
    */
   var htmlDecodeDict = {
     'quot': '"',
@@ -407,7 +407,7 @@
   /* global define,module,window */
   /* exported exports */
   if (typeof define === 'function') {
-    if (define.amd || define.cmd) {
+    if (define.amd) {
       define(function () {
         return exports;
       });

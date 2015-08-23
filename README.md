@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coverage-image]][coverage-ur]
 
 > CBML Parser
 
@@ -53,3 +53,5 @@ MIT © [zswang](http://weibo.com/zswang)
 [npm-image]: https://badge.fury.io/js/cbml.svg
 [travis-url]: https://travis-ci.org/cbml/cbmljs
 [travis-image]: https://travis-ci.org/cbml/cbmljs.svg?branch=master
+[coverage-url]: https://coveralls.io/github/zswang/jdists?branch=master
+[coverage-image]: https://coveralls.io/repos/zswang/jdists/badge.svg?branch=master&service=github

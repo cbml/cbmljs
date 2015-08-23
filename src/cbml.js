@@ -478,7 +478,7 @@
   /* global define,module,window */
   /* exported exports */
   if (typeof define === 'function') {
-    if (define.amd || define.cmd) {
+    if (define.amd) {
       define(function () {
         return exports;
       });
