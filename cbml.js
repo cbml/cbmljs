@@ -7,8 +7,8 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.1.0
-   * @date 2015-08-23
+   * @version 0.2.0
+   * @date 2015-11-22
    */
   var htmlDecodeDict = {
     'quot': '"',
@@ -389,25 +389,53 @@
         break;
       }
     });
-    for (var i = lefts.length - 1; i >= 0; i--) {
-      var curr = lefts[i];
-      curr.type = 'text';
-      delete curr.nodes; // 移除子节点
-      delete curr.tag;
-      delete curr.attrs;
-      delete curr.language;
-      var prev = lefts[i - 1];
-      if (prev) {
-        prev.value += curr.value;
-      }
-      else {
-        prev = root;
-      }
-      prev.endpos = curr.endpos;
+    if (lefts.length > 0) {
+      left2text(code, root);
     }
     return root;
   }
   exports.parse = parse;
+  /**
+   * 将没有闭合的左侧标签转换成文本节点，并合并相邻的文本节点
+   *
+   * @param {string} code 当前代码
+   * @param {Object} parentNode 父节点
+   */
+  function left2text(code, parentNode) {
+    if (!parentNode || !parentNode.nodes) {
+      return;
+    }
+    for (var i = parentNode.nodes.length - 1; i >= 0; i--) {
+      var node = parentNode.nodes[i];
+      left2text(code, node);
+      if (node.type === 'left') {
+        node.type = 'text';
+        var firstChild = node.nodes[0];
+        if (firstChild) {
+          var lastChild = node.nodes[node.nodes.length - 1];
+          node.endpos = firstChild.pos;
+          node.value = code.slice(node.pos, node.endpos);
+          var params = [i + 1, 0];
+          [].push.apply(params, node.nodes);
+          [].splice.apply(parentNode.nodes, params);
+          if (parentNode.type !== 'cbml') {
+            parentNode.endpos = lastChild.endpos;
+            parentNode.value = code.slice(parentNode.pos, parentNode.endpos);
+          }
+        }
+        delete node.nodes; // 移除子节点
+        delete node.tag;
+        delete node.attrs;
+        delete node.language;
+      }
+      var nextNode = parentNode.nodes[i + 1];
+      if (nextNode && node.type === 'text' && nextNode.type === 'text') { // 合并文本
+        nextNode.pos = node.pos;
+        nextNode.value = code.slice(nextNode.pos, nextNode.endpos);
+        parentNode.nodes.splice(i, 1);
+      }
+    }
+  }
   /* global define,module,window */
   /* exported exports */
   if (typeof define === 'function') {
