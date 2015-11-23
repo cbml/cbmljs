@@ -7,8 +7,12 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.2.0
-   * @date 2015-11-22
+   * @version 0.2.3
+   * @date 2015-11-23
+   */
+  /*<function name="decodeHTML">*/
+  /*
+   * html编码转换字典
    */
   var htmlDecodeDict = {
     'quot': '"',
@@ -18,21 +22,28 @@
     'nbsp': ' '
   };
   /**
-   * HTML 解码
+   * HTML解码
    *
-   * @param {string} html 输入
-   * @return {string} 返回解码后的字符串
+   * @param {string} html
+   '''<example>'''
+   * @example decodeHTML():base
+    ```js
+    console.log(jstrs.decodeHTML('1&nbsp;&lt;&nbsp;2'));
+    // > 1 < 2
+    ```
+   '''</example>'''
    */
   function decodeHTML(html) {
     return String(html).replace(
       /&((quot|lt|gt|amp|nbsp)|#x([a-f\d]+)|#(\d+));/ig,
-      function (all, group, key, hex, dec) {
+      function(all, group, key, hex, dec) {
         return key ? htmlDecodeDict[key.toLowerCase()] :
           hex ? String.fromCharCode(parseInt(hex, 16)) :
-          String.fromCharCode(parseInt(dec, 10));
+          String.fromCharCode(+dec);
       }
     );
   }
+  /*</function>*/
   /**
    * 突出显示错误的代码行
    *
@@ -55,6 +66,13 @@
    * @param {string} code 代码文本
    * @param {Object} options 配置项
    * @return {Array} 返回处理后语法数组
+  '''<example>'''
+   * @example tokenizer():base
+    ```js
+    console.log(JSON.stringify(cbml.tokenizer('(*<' + 'jdists import="base.js" />*)')[0].attrs));
+    // > {"import":"base.js"}
+    ```
+  '''</example>'''
    */
   function tokenizer(code, options) {
     options = options || {};

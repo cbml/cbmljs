@@ -1,6 +1,6 @@
 {
   "name": "cbml",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "CBML Parser",
   "homepage": "https://github.com/cbml/cbmljs",
   "author": {
@@ -30,13 +30,19 @@
     "istanbul": "^0.3.17",
     "should": "^4.1.0",
     "uglify-js": "^2.4.15",
-    "jdists": "^1.2.4",
-    "jshint": "^2.5.8"
+    "jdists": "^1.3.1",
+    "jshint": "^2.5.8",
+    "jstrs": "^0.0.1"
   },
   "scripts": {
+    "_update_version": "jdists version.jdists",
+    "_dist": "jdists src/cbml.js -o cbml.js -r debug,test,remove,safe",
+    "_compress": "uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
+    "example": "jdists example.jdists.js -o test/example.js -t example",
     "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec",
-    "dist": "jdists src/cbml.js -o cbml.js -r remove,debug && uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
-    "lint": "jshint src/*.js"
+    "mocha": "npm run example && mocha",
+    "dist": "npm run _update_version && npm run example && npm run _dist && npm run _compress && npm run test",
+    "lint": "jshint src/*.js *.json"
   },
   "bin": {
     "cbml": "cli.js"

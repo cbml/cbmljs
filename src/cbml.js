@@ -26,30 +26,13 @@
    */
   /*</jdists>*/
 
-  var htmlDecodeDict = {
-    'quot': '"',
-    'lt': '<',
-    'gt': '>',
-    'amp': '&',
-    'nbsp': ' '
-  };
-
-  /**
-   * HTML 解码
-   *
-   * @param {string} html 输入
-   * @return {string} 返回解码后的字符串
-   */
-  function decodeHTML(html) {
-    return String(html).replace(
-      /&((quot|lt|gt|amp|nbsp)|#x([a-f\d]+)|#(\d+));/ig,
-      function (all, group, key, hex, dec) {
-        return key ? htmlDecodeDict[key.toLowerCase()] :
-          hex ? String.fromCharCode(parseInt(hex, 16)) :
-          String.fromCharCode(parseInt(dec, 10));
-      }
-    );
-  }
+  /*<jdists
+    encoding="fndep"
+    depend="decodeHTML"
+    import="../node_modules/jstrs/jstrs.js">*/
+  var jstrs = require('jstrs');
+  var decodeHTML = jstrs.decodeHTML;
+  /*</jdists>*/
 
   /**
    * 突出显示错误的代码行
@@ -74,6 +57,14 @@
    * @param {string} code 代码文本
    * @param {Object} options 配置项
    * @return {Array} 返回处理后语法数组
+  '''<example>'''
+   * @example tokenizer():base
+    ```js
+    console.log(JSON.stringify(cbml.tokenizer('(*<' + 'jdists import="base.js" />*)')[0].attrs));
+
+    // > {"import":"base.js"}
+    ```
+  '''</example>'''
    */
   function tokenizer(code, options) {
     options = options || {};
