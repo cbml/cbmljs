@@ -281,6 +281,17 @@
         );
 
         if (!match) {
+          if (language === 'xml') { // xml 则宽松一些 // <!~1. line<br>~>
+            var match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
+            if (match) {
+              offset += match[0].length;
+              pushToken('text', S.pos, S.text.length); // 记录 text
+            } else {
+              offset = S.text.length;
+              pushToken('text', S.pos, offset); // 记录 text
+            }
+            break;
+          }
           buffer = code.slice(0, S.pos + offset).split('\n');
           line = buffer.length;
           col = buffer[buffer.length - 1].length + 1;
