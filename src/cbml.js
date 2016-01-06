@@ -282,7 +282,7 @@
 
         if (!match) {
           if (language === 'xml') { // xml 则宽松一些 // <!~1. line<br>~>
-            var match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
+            match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
             if (match) {
               offset += match[0].length;
               pushToken('text', S.pos, S.text.length); // 记录 text

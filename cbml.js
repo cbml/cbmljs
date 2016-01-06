@@ -7,8 +7,8 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.2.4
-   * @date 2015-12-29
+   * @version 0.2.5
+   * @date 2016-01-06
    */
   /*<function name="decodeHTML">*/
   /*
@@ -259,7 +259,7 @@
         );
         if (!match) {
           if (language === 'xml') { // xml 则宽松一些 // <!~1. line<br>~>
-            var match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
+            match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
             if (match) {
               offset += match[0].length;
               pushToken('text', S.pos, S.text.length); // 记录 text
