@@ -2,13 +2,29 @@
   "type": "cbml",
   "nodes": [
     {
-      "type": "text",
+      "type": "block",
       "pos": 0,
-      "endpos": 41,
-      "value": "<!--1. line <br> -->\n<!--2. grid <br> -->",
+      "endpos": 70,
+      "value": "<!--cbml-->\n  <!--1. line <br> -->\n  <!--2. grid <br> -->\n<!--/cbml-->",
+      "tag": "cbml",
+      "language": "xml",
+      "attrs": {},
       "line": 1,
-      "col": 1
+      "col": 1,
+      "nodes": [
+        {
+          "type": "text",
+          "pos": 11,
+          "endpos": 58,
+          "value": "\n  <!--1. line <br> -->\n  <!--2. grid <br> -->\n",
+          "line": 3,
+          "col": 23
+        }
+      ],
+      "content": "\n  <!--1. line <br> -->\n  <!--2. grid <br> -->\n",
+      "prefix": "<!--cbml-->",
+      "suffix": "<!--/cbml-->"
     }
   ],
-  "endpos": 41
+  "endpos": 70
 }

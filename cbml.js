@@ -7,7 +7,7 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.2.5
+   * @version 0.2.7
    * @date 2016-01-06
    */
   /*<function name="decodeHTML">*/
@@ -262,12 +262,12 @@
             match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
             if (match) {
               offset += match[0].length;
-              pushToken('text', S.pos, S.text.length); // 记录 text
+              pushToken('text', S.pos, S.pos + offset); // 记录 text
             } else {
               offset = S.text.length;
               pushToken('text', S.pos, offset); // 记录 text
             }
-            break;
+            continue;
           }
           buffer = code.slice(0, S.pos + offset).split('\n');
           line = buffer.length;
@@ -418,9 +418,7 @@
         break;
       }
     });
-    if (lefts.length > 0) {
-      left2text(code, root);
-    }
+    left2text(code, root);
     return root;
   }
   exports.parse = parse;

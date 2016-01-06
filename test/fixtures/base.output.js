@@ -280,16 +280,8 @@
         {
           "type": "text",
           "pos": 418,
-          "endpos": 424,
-          "value": "\ntest\n",
-          "line": 20,
-          "col": 20
-        },
-        {
-          "type": "text",
-          "pos": 424,
           "endpos": 462,
-          "value": "/*<jdists import=\"line21.js\">*/\nline17",
+          "value": "\ntest\n/*<jdists import=\"line21.js\">*/\nline17",
           "line": 22,
           "col": 1
         }

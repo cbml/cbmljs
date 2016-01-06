@@ -93,7 +93,6 @@
         return;
       }
       var value = code.slice(pos, endpos);
-
       var token = {
         type: type,
         pos: pos,
@@ -285,12 +284,12 @@
             match = S.text.substring(S.pos + offset).match(/^[^]*?-->/);
             if (match) {
               offset += match[0].length;
-              pushToken('text', S.pos, S.text.length); // 记录 text
+              pushToken('text', S.pos, S.pos + offset); // 记录 text
             } else {
               offset = S.text.length;
               pushToken('text', S.pos, offset); // 记录 text
             }
-            break;
+            continue;
           }
           buffer = code.slice(0, S.pos + offset).split('\n');
           line = buffer.length;
@@ -461,9 +460,7 @@
       }
     });
 
-    if (lefts.length > 0) {
-      left2text(code, root);
-    }
+    left2text(code, root);
     return root;
   }
   exports.parse = parse;
