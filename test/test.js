@@ -37,11 +37,11 @@ describe('fixtures', function() {
         }).should.throw();
         return;
       }
-      if (/base/.test(input)) {
-        console.log(JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '));
-        console.log('-------');
-        console.log(cleanCRLF(fs.readFileSync(path.join(dirname, output))));
-      }
+      // if (/jsx/.test(input)) {
+      //   console.log(JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '));
+      //   console.log('-------');
+      //   console.log(cleanCRLF(fs.readFileSync(path.join(dirname, output))));
+      // }
       assert.equal(
         JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '),
         cleanCRLF(fs.readFileSync(path.join(dirname, output)))

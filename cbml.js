@@ -7,8 +7,8 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.2.7
-   * @date 2016-01-06
+   * @version 0.2.8
+   * @date 2016-06-28
    */
   /*<function name="decodeHTML">*/
   /*
@@ -134,6 +134,7 @@
       pushToken('text', S.pos, S.pos + match.index); // 记录 text
       var tag = match[3];
       var attrs = {};
+      var attrStyles = {}; // 『'』、『"』、undefined
       var offset = match[0].length;
       var language;
       var find; // find end
@@ -233,6 +234,7 @@
           case '"':
           case "'":
             attrValue = attrValue.slice(1, -1);
+            attrStyles[attrName] = attrValue[0];
             break;
           }
           attrs[attrName] = decodeHTML(attrValue);
@@ -268,6 +270,26 @@
               pushToken('text', S.pos, offset); // 记录 text
             }
             continue;
+          }
+          if (language === 'c') { // jsx
+            var isJsx;
+            Object.keys(attrs).some(function (key) {
+              if (!attrStyles[key] && /^\s*\{/.test(attrs[key])) {
+                isJsx = true;
+                return true;
+              }
+            });
+            if (isJsx) {
+              match = S.text.substring(S.pos + offset).match(/^[^]*?>\*\//);
+              if (match) {
+                offset += match[0].length;
+                pushToken('text', S.pos, S.pos + offset); // 记录 text
+              } else {
+                offset = S.text.length;
+                pushToken('text', S.pos, offset); // 记录 text
+              }
+              continue;
+            }
           }
           buffer = code.slice(0, S.pos + offset).split('\n');
           line = buffer.length;

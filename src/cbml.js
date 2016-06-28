@@ -139,6 +139,7 @@
 
       var tag = match[3];
       var attrs = {};
+      var attrStyles = {}; // 『'』、『"』、undefined
       var offset = match[0].length;
 
       var language;
@@ -252,6 +253,7 @@
           case '"':
           case "'":
             attrValue = attrValue.slice(1, -1);
+            attrStyles[attrName] = attrValue[0];
             break;
           }
           attrs[attrName] = decodeHTML(attrValue);
@@ -291,6 +293,29 @@
             }
             continue;
           }
+
+          if (language === 'c') { // jsx
+            var isJsx;
+            Object.keys(attrs).some(function (key) {
+              if (!attrStyles[key] && /^\s*\{/.test(attrs[key])) {
+                isJsx = true;
+                return true;
+              }
+            });
+            if (isJsx) {
+              match = S.text.substring(S.pos + offset).match(/^[^]*?>\*\//);
+              if (match) {
+                offset += match[0].length;
+                pushToken('text', S.pos, S.pos + offset); // 记录 text
+              } else {
+                offset = S.text.length;
+                pushToken('text', S.pos, offset); // 记录 text
+              }
+              continue;
+            }
+          }
+
+
           buffer = code.slice(0, S.pos + offset).split('\n');
           line = buffer.length;
           col = buffer[buffer.length - 1].length + 1;
