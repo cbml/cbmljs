@@ -295,14 +295,16 @@
           }
 
           if (language === 'c') { // jsx
-            var isJsx;
+            var isJSX;
+            /*jshint loopfunc: true */
             Object.keys(attrs).some(function (key) {
               if (!attrStyles[key] && /^\s*\{/.test(attrs[key])) {
-                isJsx = true;
+                isJSX = true;
                 return true;
               }
             });
-            if (isJsx) {
+            /*jshint loopfunc: false */
+            if (isJSX) {
               match = S.text.substring(S.pos + offset).match(/^[^]*?>\*\//);
               if (match) {
                 offset += match[0].length;
