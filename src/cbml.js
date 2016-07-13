@@ -88,6 +88,11 @@
      */
     var tokens = [];
 
+    var S = { // 扫描的信息
+      text: code,
+      pos: 0 // 扫描位置
+    };
+
     function pushToken(type, pos, endpos, data) {
       if (endpos <= pos) {
         return;
@@ -114,11 +119,6 @@
       S.pos = endpos;
       tokens.push(token);
     }
-
-    var S = { // 扫描的信息
-      text: code,
-      pos: 0 // 扫描位置
-    };
 
     /*<debug hint="避免死循环">
     var count = 0;
@@ -374,6 +374,49 @@
   }
 
   /**
+   * 将没有闭合的左侧标签转换成文本节点，并合并相邻的文本节点
+   *
+   * @param {string} code 当前代码
+   * @param {Object} parentNode 父节点
+   */
+  function left2text(code, parentNode) {
+    if (!parentNode || !parentNode.nodes) {
+      return;
+    }
+    for (var i = parentNode.nodes.length - 1; i >= 0; i--) {
+      var node = parentNode.nodes[i];
+      left2text(code, node);
+      if (node.type === 'left') {
+        node.type = 'text';
+        var firstChild = node.nodes[0];
+        if (firstChild) {
+          var lastChild = node.nodes[node.nodes.length - 1];
+          node.endpos = firstChild.pos;
+          node.value = code.slice(node.pos, node.endpos);
+          var params = [i + 1, 0];
+          [].push.apply(params, node.nodes);
+          [].splice.apply(parentNode.nodes, params);
+          if (parentNode.type !== 'cbml') {
+            parentNode.endpos = lastChild.endpos;
+            parentNode.value = code.slice(parentNode.pos, parentNode.endpos);
+          }
+        }
+        delete node.nodes; // 移除子节点
+        delete node.tag;
+        delete node.attrs;
+        delete node.language;
+      }
+
+      var nextNode = parentNode.nodes[i + 1];
+      if (nextNode && node.type === 'text' && nextNode.type === 'text') { // 合并文本
+        nextNode.pos = node.pos;
+        nextNode.value = code.slice(nextNode.pos, nextNode.endpos);
+        parentNode.nodes.splice(i, 1);
+      }
+    }
+  }
+
+  /**
    * CBML 解析
    *
    * @param {string} code 代码文本
@@ -491,49 +534,6 @@
     return root;
   }
   exports.parse = parse;
-
-  /**
-   * 将没有闭合的左侧标签转换成文本节点，并合并相邻的文本节点
-   *
-   * @param {string} code 当前代码
-   * @param {Object} parentNode 父节点
-   */
-  function left2text(code, parentNode) {
-    if (!parentNode || !parentNode.nodes) {
-      return;
-    }
-    for (var i = parentNode.nodes.length - 1; i >= 0; i--) {
-      var node = parentNode.nodes[i];
-      left2text(code, node);
-      if (node.type === 'left') {
-        node.type = 'text';
-        var firstChild = node.nodes[0];
-        if (firstChild) {
-          var lastChild = node.nodes[node.nodes.length - 1];
-          node.endpos = firstChild.pos;
-          node.value = code.slice(node.pos, node.endpos);
-          var params = [i + 1, 0];
-          [].push.apply(params, node.nodes);
-          [].splice.apply(parentNode.nodes, params);
-          if (parentNode.type !== 'cbml') {
-            parentNode.endpos = lastChild.endpos;
-            parentNode.value = code.slice(parentNode.pos, parentNode.endpos);
-          }
-        }
-        delete node.nodes; // 移除子节点
-        delete node.tag;
-        delete node.attrs;
-        delete node.language;
-      }
-
-      var nextNode = parentNode.nodes[i + 1];
-      if (nextNode && node.type === 'text' && nextNode.type === 'text') { // 合并文本
-        nextNode.pos = node.pos;
-        nextNode.value = code.slice(nextNode.pos, nextNode.endpos);
-        parentNode.nodes.splice(i, 1);
-      }
-    }
-  }
 
   /* global define,module,window */
   /* exported exports */
