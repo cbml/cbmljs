@@ -282,8 +282,8 @@
           "pos": 418,
           "endpos": 462,
           "value": "\ntest\n/*<jdists import=\"line21.js\">*/\nline17",
-          "line": 22,
-          "col": 1
+          "line": 20,
+          "col": 20
         }
       ],
       "content": "\ntest\n/*<jdists import=\"line21.js\">*/\nline17",

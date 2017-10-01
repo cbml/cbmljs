@@ -410,6 +410,8 @@
       var nextNode = parentNode.nodes[i + 1];
       if (nextNode && node.type === 'text' && nextNode.type === 'text') { // 合并文本
         nextNode.pos = node.pos;
+        nextNode.line = node.line
+        nextNode.col = node.col
         nextNode.value = code.slice(nextNode.pos, nextNode.endpos);
         parentNode.nodes.splice(i, 1);
       }

@@ -7,8 +7,8 @@
    * CBML Parser
    * @author
    *   zswang (http://weibo.com/zswang)
-   * @version 0.2.9
-   * @date 2016-07-13
+   * @version 0.2.12
+   * @date 2017-10-01
    */
   /*<function name="decodeHTML">*/
   /*
@@ -374,6 +374,8 @@
       var nextNode = parentNode.nodes[i + 1];
       if (nextNode && node.type === 'text' && nextNode.type === 'text') { // 合并文本
         nextNode.pos = node.pos;
+        nextNode.line = node.line
+        nextNode.col = node.col
         nextNode.value = code.slice(nextNode.pos, nextNode.endpos);
         parentNode.nodes.splice(i, 1);
       }
