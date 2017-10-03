@@ -1,0 +1,136 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: TextNode
+    content: |
+      <body>
+    loc:
+      source: |
+        <body>
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 2
+        column: 1
+  - type: BlockElement
+    attributes: []
+    tag: jdists
+    language: xml
+    body: []
+    loc:
+      source: <!--jdists--><!--/jdists-->
+      start:
+        line: 2
+        column: 1
+      end:
+        line: 2
+        column: 28
+  - type: TextNode
+    content: |
+
+      <!--bower-->
+    loc:
+      source: |
+
+        <!--bower-->
+      start:
+        line: 2
+        column: 28
+      end:
+        line: 4
+        column: 1
+  - type: BlockElement
+    attributes: []
+    tag: jdists
+    language: xml
+    body:
+      - type: TextNode
+        content: Hello
+        loc:
+          source: Hello
+          start:
+            line: 4
+            column: 14
+          end:
+            line: 4
+            column: 19
+    loc:
+      source: <!--jdists-->Hello<!--/jdists-->
+      start:
+        line: 4
+        column: 1
+      end:
+        line: 4
+        column: 33
+  - type: TextNode
+    content: |
+
+      <!--endbower-->
+      </body>
+    loc:
+      source: |
+
+        <!--endbower-->
+        </body>
+      start:
+        line: 4
+        column: 33
+      end:
+        line: 7
+        column: 1
+  - type: BlockElement
+    attributes: []
+    tag: cbml
+    language: xml
+    body:
+      - type: TextNode
+        content: World!
+        loc:
+          source: World!
+          start:
+            line: 7
+            column: 12
+          end:
+            line: 7
+            column: 18
+    loc:
+      source: <!--cbml-->World!<!--/cbml-->
+      start:
+        line: 7
+        column: 1
+      end:
+        line: 7
+        column: 30
+  - type: TextNode
+    loc:
+      source: |-
+
+        <!--bower-->
+      start:
+        line: 7
+        column: 30
+      end:
+        line: 8
+        column: 13
+    content: |-
+
+      <!--bower-->
+loc:
+  source: |-
+    <body>
+    <!--jdists--><!--/jdists-->
+    <!--bower-->
+    <!--jdists-->Hello<!--/jdists-->
+    <!--endbower-->
+    </body>
+    <!--cbml-->World!<!--/cbml-->
+    <!--bower-->
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 8
+    column: 13

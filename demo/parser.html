@@ -50,29 +50,15 @@ console.log(line19);
   /*</jdists>*/
 line32/*</jdists>*/
 line33</script>
-<script src="../cbml.js"></script>
+<script src="../lib/cbml.js"></script>
 <script>
 (function() {
-  var code = document.querySelector('script[type="text/jdists"]').innerHTML;
-  var tokens = cbml.tokenizer(code);
-  var tree = cbml.parse(code);
-  document.querySelector('textarea').value = code;
+  var code = document.querySelector('script[type="text/jdists"]').innerHTML
+  var root = cbml.parse(code)
+  document.querySelector('textarea').value = code
 
-  console.log(JSON.stringify(tree, null, '  '));
-  return;
-
-  var messages = [];
-  tokens.forEach(function(token) {
-    messages.push(token.line + ',' + token.col + ':『' + token.value + '』');
-  });
-  document.querySelector('textarea').value = messages.join('');
-
-  console.log('tokens: ' + JSON.stringify(
-    tokens,
-    null,
-    '  '
-  ));
-})();
+  console.log(JSON.stringify(root, null, '  '))
+})()
 </script>
 </body>
 </html>

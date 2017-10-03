@@ -1,6 +1,6 @@
 {
   "name": "cbml",
-  "version": "0.2.12",
+  "version": "1.0.0-alpha.3",
   "description": "CBML Parser",
   "homepage": "https://github.com/cbml/cbmljs",
   "author": {
@@ -9,10 +9,10 @@
   },
   "repository": "https://github.com/cbml/cbmljs.git",
   "license": "MIT",
-  "main": "cbml.js",
+  "main": "lib/cbml",
+  "typings": "lib/cbml.d.ts",
   "files": [
-    "cbml.js",
-    "cli.js"
+    "lib"
   ],
   "keywords": [
     "cbml",
@@ -26,25 +26,34 @@
     "optimist": "^0.6.1"
   },
   "devDependencies": {
-    "mocha": "^2.0.1",
+    "gulp": "^3.9.1",
+    "gulp-examplejs": "0.0.9",
+    "gulp-jdists": "^2.0.17",
+    "gulp-linenum": "0.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-typescript": "^3.2.2",
+    "gulp-uglify": "^3.0.0",
     "istanbul": "^0.3.17",
-    "should": "^4.1.0",
-    "uglify-js": "^2.4.15",
-    "jdists": "^1.3.1",
+    "jdists": "^2.2.0",
+    "js-yaml": "^3.9.1",
     "jshint": "^2.5.8",
-    "jstrs": "^0.0.1"
+    "jstrs": "^0.0.1",
+    "merge2": "^1.1.0",
+    "mocha": "^2.0.1",
+    "should": "^4.1.0",
+    "typescript": "^2.5.2",
+    "uglify-js": "^2.4.15"
   },
   "scripts": {
-    "_update_version": "jdists version.jdists",
-    "_dist": "jdists src/cbml.js -o cbml.js -r debug,test,remove,safe",
-    "_compress": "uglifyjs cbml.js -o cbml.min.js -p 5 -c -m",
-    "example": "jdists example.jdists.js -o test/example.js -t example",
+    "_update_version": "node version.js",
+    "_dist": "gulp dist",
     "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec",
-    "mocha": "npm run example && mocha",
-    "dist": "npm run _update_version && npm run example && npm run _dist && npm run _compress && npm run test",
-    "lint": "jshint src/*.js *.json"
+    "example": "gulp example",
+    "mocha": "mocha",
+    "dist": "npm run _update_version && npm run _dist && npm run test"
   },
   "bin": {
-    "cbml": "cli.js"
+    "cbml": "lib/cli.js"
   }
 }

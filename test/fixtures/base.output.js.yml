@@ -1,0 +1,734 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: CommentElement
+    attributes: []
+    tag: ok
+    language: xml
+    body:
+      - type: TextNode
+        content: |
+          line1
+        loc:
+          source: |
+            line1
+          start:
+            line: 1
+            column: 8
+          end:
+            line: 2
+            column: 1
+      - type: BlockElement
+        attributes: []
+        tag: jdists
+        language: c
+        body:
+          - type: TextNode
+            content: line1.2
+            loc:
+              source: line1.2
+              start:
+                line: 2
+                column: 13
+              end:
+                line: 2
+                column: 20
+        loc:
+          source: /*<jdists>*/line1.2/*</jdists>*/
+          start:
+            line: 2
+            column: 1
+          end:
+            line: 2
+            column: 33
+      - type: TextNode
+        content: |-
+
+          line2
+        loc:
+          source: |-
+
+            line2
+          start:
+            line: 2
+            column: 33
+          end:
+            line: 3
+            column: 6
+    loc:
+      source: |-
+        <!--ok>line1
+        /*<jdists>*/line1.2/*</jdists>*/
+        line2</ok-->
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 3
+        column: 13
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 3
+        column: 13
+      end:
+        line: 4
+        column: 1
+  - type: VoidElement
+    attributes:
+      - name: import
+        value: 6.js
+        quoted: '"'
+      - name: line3
+        value: ''
+        quoted: ''
+    tag: jdists
+    language: c
+    loc:
+      source: /*<jdists import="6.js" line3 />*/
+      start:
+        line: 4
+        column: 1
+      end:
+        line: 4
+        column: 35
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 4
+        column: 35
+      end:
+        line: 5
+        column: 1
+  - type: BlockElement
+    attributes:
+      - name: clean
+        value: ''
+        quoted: ''
+      - name: id
+        value: ttc
+        quoted: ''''
+      - name: import
+        value: 5.js
+        quoted: '"'
+      - name: line4
+        value: ''
+        quoted: ''
+    tag: jdists
+    language: c
+    body:
+      - type: TextNode
+        content: |
+
+          console.log(line5);
+        loc:
+          source: |
+
+            console.log(line5);
+          start:
+            line: 5
+            column: 48
+          end:
+            line: 7
+            column: 1
+    loc:
+      source: |-
+        /*<jdists clean id='ttc' import="5.js" line4>*/
+        console.log(line5);
+        /*</jdists>*/
+      start:
+        line: 5
+        column: 1
+      end:
+        line: 7
+        column: 14
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 7
+        column: 14
+      end:
+        line: 8
+        column: 1
+  - type: CommentElement
+    attributes:
+      - name: line7
+        value: ''
+        quoted: ''
+    tag: remove
+    language: c
+    body:
+      - type: TextNode
+        content: |
+
+          console.log(line8);
+        loc:
+          source: |
+
+            console.log(line8);
+          start:
+            line: 8
+            column: 17
+          end:
+            line: 10
+            column: 1
+    loc:
+      source: |-
+        /*<remove line7>
+        console.log(line8);
+        </remove>*/
+      start:
+        line: 8
+        column: 1
+      end:
+        line: 10
+        column: 12
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 10
+        column: 12
+      end:
+        line: 11
+        column: 1
+  - type: CommentElement
+    attributes:
+      - name: line10
+        value: ''
+        quoted: ''
+    tag: delphi
+    language: pascal
+    body:
+      - type: TextNode
+        content: |
+
+          console.log(line11);
+        loc:
+          source: |
+
+            console.log(line11);
+          start:
+            line: 11
+            column: 18
+          end:
+            line: 13
+            column: 1
+    loc:
+      source: |-
+        (*<delphi line10>
+        console.log(line11);
+        </delphi>*)
+      start:
+        line: 11
+        column: 1
+      end:
+        line: 13
+        column: 12
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 13
+        column: 12
+      end:
+        line: 14
+        column: 1
+  - type: BlockElement
+    attributes:
+      - name: line13
+        value: 'a&b3 '
+        quoted: '"'
+    tag: delphi
+    language: pascal
+    body:
+      - type: TextNode
+        content: |
+
+          console.log(line14);
+        loc:
+          source: |
+
+            console.log(line14);
+          start:
+            line: 14
+            column: 41
+          end:
+            line: 16
+            column: 1
+    loc:
+      source: |-
+        (*<delphi line13="a&amp;b&#x33;&#32;">*)
+        console.log(line14);
+        (*</delphi>*)
+      start:
+        line: 14
+        column: 1
+      end:
+        line: 16
+        column: 14
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 16
+        column: 14
+      end:
+        line: 17
+        column: 1
+  - type: BlockElement
+    attributes:
+      - name: line16
+        value: ''
+        quoted: ''
+    tag: release
+    language: python
+    body:
+      - type: TextNode
+        content: |
+
+          line14
+        loc:
+          source: |
+
+            line14
+          start:
+            line: 17
+            column: 23
+          end:
+            line: 19
+            column: 1
+    loc:
+      source: |-
+        '''<release line16>'''
+        line14
+        '''</release>'''
+      start:
+        line: 17
+        column: 1
+      end:
+        line: 19
+        column: 17
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 19
+        column: 17
+      end:
+        line: 20
+        column: 1
+  - type: CommentElement
+    attributes:
+      - name: line19
+        value: ''
+        quoted: ''
+    tag: release
+    language: python
+    body:
+      - type: TextNode
+        content: |-
+
+          test
+          /*<jdists import="line21.js">*/
+          line17
+        loc:
+          source: |-
+
+            test
+            /*<jdists import="line21.js">*/
+            line17
+          start:
+            line: 20
+            column: 20
+          end:
+            line: 23
+            column: 7
+    loc:
+      source: |-
+        '''<release line19>
+        test
+        /*<jdists import="line21.js">*/
+        line17</release>'''
+      start:
+        line: 20
+        column: 1
+      end:
+        line: 23
+        column: 20
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 23
+        column: 20
+      end:
+        line: 24
+        column: 1
+  - type: BlockElement
+    attributes:
+      - name: import
+        value: line23.js
+        quoted: '"'
+    tag: jdists
+    language: c
+    body:
+      - type: TextNode
+        content: |
+
+          console.log(line19);
+        loc:
+          source: |
+
+            console.log(line19);
+          start:
+            line: 24
+            column: 32
+          end:
+            line: 26
+            column: 1
+    loc:
+      source: |-
+        /*<jdists import="line23.js">*/
+        console.log(line19);
+        /*</jdists>*/
+      start:
+        line: 24
+        column: 1
+      end:
+        line: 26
+        column: 14
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 26
+        column: 14
+      end:
+        line: 27
+        column: 1
+  - type: BlockElement
+    attributes:
+      - name: import
+        value: line26.js
+        quoted: '"'
+    tag: jdists
+    language: c
+    body:
+      - type: TextNode
+        content: |-
+
+            
+        loc:
+          source: |-
+
+              
+          start:
+            line: 27
+            column: 32
+          end:
+            line: 28
+            column: 3
+      - type: BlockElement
+        attributes:
+          - name: import
+            value: line27.js
+            quoted: '"'
+        tag: jdists
+        language: c
+        body:
+          - type: TextNode
+            content: |-
+
+                  
+            loc:
+              source: |-
+
+                    
+              start:
+                line: 28
+                column: 34
+              end:
+                line: 29
+                column: 5
+          - type: BlockElement
+            attributes:
+              - name: import
+                value: line28.js
+                quoted: '"'
+            tag: jdists
+            language: c
+            body:
+              - type: TextNode
+                content: console.log(4);
+                loc:
+                  source: console.log(4);
+                  start:
+                    line: 29
+                    column: 36
+                  end:
+                    line: 29
+                    column: 51
+            loc:
+              source: /*<jdists import="line28.js">*/console.log(4);/*</jdists>*/
+              start:
+                line: 29
+                column: 5
+              end:
+                line: 29
+                column: 64
+          - type: TextNode
+            content: |-
+
+                  
+            loc:
+              source: |-
+
+                    
+              start:
+                line: 29
+                column: 64
+              end:
+                line: 30
+                column: 5
+          - type: BlockElement
+            attributes:
+              - name: import
+                value: line29.js
+                quoted: '"'
+            tag: jdists
+            language: c
+            body:
+              - type: TextNode
+                content: console.log(5);
+                loc:
+                  source: console.log(5);
+                  start:
+                    line: 30
+                    column: 36
+                  end:
+                    line: 30
+                    column: 51
+            loc:
+              source: /*<jdists import="line29.js">*/console.log(5);/*</jdists>*/
+              start:
+                line: 30
+                column: 5
+              end:
+                line: 30
+                column: 64
+          - type: TextNode
+            content: |-
+
+                  console.log(line30);
+                
+            loc:
+              source: |-
+
+                    console.log(line30);
+                  
+              start:
+                line: 30
+                column: 64
+              end:
+                line: 32
+                column: 3
+        loc:
+          source: |-
+            /*<jdists import="line27.js">*/
+                /*<jdists import="line28.js">*/console.log(4);/*</jdists>*/
+                /*<jdists import="line29.js">*/console.log(5);/*</jdists>*/
+                console.log(line30);
+              /*</jdists>*/
+          start:
+            line: 28
+            column: 3
+          end:
+            line: 32
+            column: 16
+      - type: TextNode
+        content: |-
+
+          line32
+        loc:
+          source: |-
+
+            line32
+          start:
+            line: 32
+            column: 16
+          end:
+            line: 33
+            column: 7
+    loc:
+      source: |-
+        /*<jdists import="line26.js">*/
+          /*<jdists import="line27.js">*/
+            /*<jdists import="line28.js">*/console.log(4);/*</jdists>*/
+            /*<jdists import="line29.js">*/console.log(5);/*</jdists>*/
+            console.log(line30);
+          /*</jdists>*/
+        line32/*</jdists>*/
+      start:
+        line: 27
+        column: 1
+      end:
+        line: 33
+        column: 20
+  - type: TextNode
+    content: |
+
+      line33
+    loc:
+      source: |
+
+        line33
+      start:
+        line: 33
+        column: 20
+      end:
+        line: 35
+        column: 1
+  - type: BlockElement
+    attributes: []
+    tag: lua
+    language: lua
+    body:
+      - type: TextNode
+        content: |
+
+          line35 = {}
+        loc:
+          source: |
+
+            line35 = {}
+          start:
+            line: 35
+            column: 12
+          end:
+            line: 37
+            column: 1
+    loc:
+      source: |-
+        --[[<lua>]]
+        line35 = {}
+        --[[</lua>]]
+      start:
+        line: 35
+        column: 1
+      end:
+        line: 37
+        column: 13
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 37
+        column: 13
+      end:
+        line: 38
+        column: 1
+  - type: CommentElement
+    attributes: []
+    tag: lua
+    language: lua
+    body:
+      - type: TextNode
+        content: 'line38 = {}'
+        loc:
+          source: 'line38 = {}'
+          start:
+            line: 38
+            column: 10
+          end:
+            line: 38
+            column: 21
+    loc:
+      source: '--[[<lua>line38 = {}</lua>]]'
+      start:
+        line: 38
+        column: 1
+      end:
+        line: 38
+        column: 29
+loc:
+  source: |-
+    <!--ok>line1
+    /*<jdists>*/line1.2/*</jdists>*/
+    line2</ok-->
+    /*<jdists import="6.js" line3 />*/
+    /*<jdists clean id='ttc' import="5.js" line4>*/
+    console.log(line5);
+    /*</jdists>*/
+    /*<remove line7>
+    console.log(line8);
+    </remove>*/
+    (*<delphi line10>
+    console.log(line11);
+    </delphi>*)
+    (*<delphi line13="a&amp;b&#x33;&#32;">*)
+    console.log(line14);
+    (*</delphi>*)
+    '''<release line16>'''
+    line14
+    '''</release>'''
+    '''<release line19>
+    test
+    /*<jdists import="line21.js">*/
+    line17</release>'''
+    /*<jdists import="line23.js">*/
+    console.log(line19);
+    /*</jdists>*/
+    /*<jdists import="line26.js">*/
+      /*<jdists import="line27.js">*/
+        /*<jdists import="line28.js">*/console.log(4);/*</jdists>*/
+        /*<jdists import="line29.js">*/console.log(5);/*</jdists>*/
+        console.log(line30);
+      /*</jdists>*/
+    line32/*</jdists>*/
+    line33
+    --[[<lua>]]
+    line35 = {}
+    --[[</lua>]]
+    --[[<lua>line38 = {}</lua>]]
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 38
+    column: 29

@@ -1,0 +1,104 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: BlockElement
+    attributes:
+      - name: encoding
+        value: base64
+        quoted: '"'
+    tag: jdists
+    language: c
+    body:
+      - type: TextNode
+        content: |-
+
+          hello world!
+            
+        loc:
+          source: |-
+
+            hello world!
+              
+          start:
+            line: 1
+            column: 31
+          end:
+            line: 3
+            column: 3
+      - type: BlockElement
+        attributes:
+          - name: encoding
+            value: quoted
+            quoted: '"'
+        tag: jdists
+        language: c
+        body:
+          - type: TextNode
+            content: |-
+
+                123
+                
+            loc:
+              source: |-
+
+                  123
+                  
+              start:
+                line: 3
+                column: 33
+              end:
+                line: 5
+                column: 3
+        loc:
+          source: |-
+            /*<jdists encoding="quoted">*/
+              123
+              /*</jdists>*/
+          start:
+            line: 3
+            column: 3
+          end:
+            line: 5
+            column: 16
+      - type: TextNode
+        content: |+
+
+        loc:
+          source: |+
+
+          start:
+            line: 5
+            column: 16
+          end:
+            line: 6
+            column: 1
+    loc:
+      source: |-
+        /*<jdists encoding="base64">*/
+        hello world!
+          /*<jdists encoding="quoted">*/
+          123
+          /*</jdists>*/
+        /*</jdists>*/
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 6
+        column: 14
+loc:
+  source: |-
+    /*<jdists encoding="base64">*/
+    hello world!
+      /*<jdists encoding="quoted">*/
+      123
+      /*</jdists>*/
+    /*</jdists>*/
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 6
+    column: 14

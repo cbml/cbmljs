@@ -1,51 +1,73 @@
-var cbml = require('../.');
-var assert = require('should');
-var fs = require('fs');
-var util = require('util');
-var path = require('path');
+const cbml = require('../')
+const assert = require('should')
+const fs = require('fs')
+const util = require('util')
+const path = require('path')
+const yaml = require('js-yaml')
 
 /**
  * 清除 \r，为兼容 Windows 下的文本换行符 CRLF
  */
 function cleanCRLF(text) {
-  return String(text).replace(/\r\n?/g, '\n');
+  return String(text).replace(/\r\n?/g, '\n')
 }
 
-// coverage
-cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
-  ignoreLine: true
-});
-cbml.parse('/*<cctv>*//*</cctv>*/');
-cbml.parse();
-
-describe('coverage', function() {
+describe('coverage', function () {
   it('empty string', function () {
-    assert.equal(typeof cbml.parse(''), 'object');
+    var root = cbml.parse('')
+    assert.equal(typeof root, 'object')
+    assert.equal(root.loc.source, '')
   })
-});
 
-describe('fixtures', function() {
-  var dirname = 'test/fixtures';
-  var items = fs.readdirSync(dirname).filter(function(item) {
-    return /\.input\.(\w+)$/.test(item);
-  }).forEach(function(input) {
-    var output = input.replace(/\.input\.(\w+)$/, '.output.$1');
-    it(input, function() {
+  it('ignore source', function () {
+    var root = cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
+      ignoreSource: true,
+    })
+    assert.equal(root.loc.source, null)
+  })
+
+  it('ignore location', function () {
+    var root = cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
+      ignoreLocation: true,
+    })
+    assert.equal(root.loc, null)
+  })
+
+  it('empty params', function () {
+    var root = cbml.parse()
+    assert.equal(root, null)
+  })
+
+  it('xml compatible', function () {
+    var root = cbml.parse('<!--xml data="1"')
+    assert.equal(root.body[0].type, 'TextNode')
+    assert.equal(root.body[0].content, '<!--xml data="1"')
+  })
+
+  it('c compatible', function () {
+    var root = cbml.parse('{/*<Checkbox defaultChecked={isIPage} name="isFolder"')
+    assert.equal(root.body[0].type, 'TextNode')
+    assert.equal(root.body[0].content, '{/*<Checkbox defaultChecked={isIPage} name="isFolder"')
+  })
+})
+
+describe('fixtures', function () {
+  var dirname = 'test/fixtures'
+  var items = fs.readdirSync(dirname).filter(function (item) {
+    return /\.input\.(\w+)$/.test(item)
+  }).forEach(function (input) {
+    var output = input.replace(/\.input\.(\w+)$/, '.output.$1.yml')
+    it(input, function () {
       if (/\.throw\./.test(input)) { // 出现异常
-        (function() {
-          cbml.parse(fs.readFileSync(path.join(dirname, input)));
-        }).should.throw();
-        return;
+        (function () {
+          cbml.parse(fs.readFileSync(path.join(dirname, input)))
+        }).should.throw()
+        return
       }
-      // if (/jsx/.test(input)) {
-      //   console.log(JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '));
-      //   console.log('-------');
-      //   console.log(cleanCRLF(fs.readFileSync(path.join(dirname, output))));
-      // }
       assert.equal(
-        JSON.stringify(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '),
+        yaml.dump(cbml.parse(fs.readFileSync(path.join(dirname, input))), null, '  '),
         cleanCRLF(fs.readFileSync(path.join(dirname, output)))
-      );
-    });
-  });
-});
+      )
+    })
+  })
+})

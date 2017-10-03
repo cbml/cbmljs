@@ -1,0 +1,104 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: CommentElement
+    attributes:
+      - name: encoding
+        value: quoted
+        quoted: '"'
+    tag: relpace
+    language: xml
+    body:
+      - type: TextNode
+        content: |
+
+          line3
+        loc:
+          source: |
+
+            line3
+          start:
+            line: 1
+            column: 31
+          end:
+            line: 3
+            column: 1
+      - type: CommentElement
+        attributes:
+          - name: encoding
+            value: base64
+            quoted: '"'
+        tag: jdists
+        language: c
+        body:
+          - type: TextNode
+            content: |
+
+              line4
+            loc:
+              source: |
+
+                line4
+              start:
+                line: 3
+                column: 29
+              end:
+                line: 5
+                column: 1
+        loc:
+          source: |-
+            /*<jdists encoding="base64">
+            line4
+            </jdists>*/
+          start:
+            line: 3
+            column: 1
+          end:
+            line: 5
+            column: 12
+      - type: TextNode
+        content: |
+
+          line2
+        loc:
+          source: |
+
+            line2
+          start:
+            line: 5
+            column: 12
+          end:
+            line: 7
+            column: 1
+    loc:
+      source: |-
+        <!--relpace encoding="quoted">
+        line3
+        /*<jdists encoding="base64">
+        line4
+        </jdists>*/
+        line2
+        </relpace-->
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 7
+        column: 13
+loc:
+  source: |-
+    <!--relpace encoding="quoted">
+    line3
+    /*<jdists encoding="base64">
+    line4
+    </jdists>*/
+    line2
+    </relpace-->
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 7
+    column: 13

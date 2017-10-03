@@ -1,0 +1,50 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: BlockElement
+    attributes: []
+    tag: cbml
+    language: xml
+    body:
+      - type: TextNode
+        content: |
+
+            <!--1. line <br> -->
+            <!--2. grid <br> -->
+        loc:
+          source: |
+
+              <!--1. line <br> -->
+              <!--2. grid <br> -->
+          start:
+            line: 1
+            column: 12
+          end:
+            line: 4
+            column: 1
+    loc:
+      source: |-
+        <!--cbml-->
+          <!--1. line <br> -->
+          <!--2. grid <br> -->
+        <!--/cbml-->
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 4
+        column: 13
+loc:
+  source: |-
+    <!--cbml-->
+      <!--1. line <br> -->
+      <!--2. grid <br> -->
+    <!--/cbml-->
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 4
+    column: 13

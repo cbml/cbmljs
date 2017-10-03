@@ -31,10 +31,12 @@ node_modules
 # Bower
 coverage
 components
-lib
 
 # test
 assets
 
 # release
 release
+
+# debug
+debug.*

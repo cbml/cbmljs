@@ -6,24 +6,22 @@
 
 ![cbml](https://cloud.githubusercontent.com/assets/536587/8889268/b5f8a5aa-3305-11e5-8f3d-6af1ccbf1474.png)
 
-```js
-{
-    "type": "block", // token type : "text" | "block" | "single"
-    "pos": 7, // Starting position
-    "endpos": 333, // End position
-    "value": "/*<jdists>*/.../*</jdists>*/", // All value // as "{{prefix}}" + "{{content}}" + "{{suffix}}"
-    "tag": "jdists", // tag name
-    "language": "c", // language : "c" | "pascal" | "python" | "lua"
-    "attrs": {},
-	"line": 1, // Line Numbers
-	"col": 8 // Column number
-    "nodes": [
-       ...
-    ],
-	"content": "...",
-	"prefix": "/*<jdists>*/",
-	"suffix": "/*</jdists>*/"
-}
+```yaml
+- type: BlockElement # TextNode, CommonElement, VoidElement, CBMLElement
+  attributes: []
+  tag: jdists
+  language: c # pascal, xml, python, lua
+  body:
+    - type: TextNode
+      content: line1.2
+      loc:
+        source: line1.2
+        start:
+          line: 2
+          column: 13
+        end:
+          line: 2
+          column: 20
 ```
 
 ## Install

@@ -1,0 +1,52 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: CommentElement
+    attributes:
+      - name: encoding
+        value: ejs
+        quoted: '"'
+      - name: data
+        value: '{filename: ''hello.js''}'
+        quoted: '"'
+    tag: jdists
+    language: c
+    body:
+      - type: TextNode
+        content: |
+
+          <%- ['<!--', 'import="', filename, '" /-->'].join('') %>
+        loc:
+          source: |
+
+            <%- ['<!--', 'import="', filename, '" /-->'].join('') %>
+          start:
+            line: 1
+            column: 56
+          end:
+            line: 3
+            column: 1
+    loc:
+      source: |-
+        /*<jdists encoding="ejs" data="{filename: 'hello.js'}">
+        <%- ['<!--', 'import="', filename, '" /-->'].join('') %>
+        </jdists>*/
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 3
+        column: 12
+loc:
+  source: |-
+    /*<jdists encoding="ejs" data="{filename: 'hello.js'}">
+    <%- ['<!--', 'import="', filename, '" /-->'].join('') %>
+    </jdists>*/
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 3
+    column: 12

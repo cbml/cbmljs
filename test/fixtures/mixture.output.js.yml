@@ -1,0 +1,107 @@
+language: cbml
+tag: '#cbml'
+attributes: []
+type: CBMLElement
+body:
+  - type: BlockElement
+    attributes:
+      - name: info
+        value: file
+        quoted: '"'
+    tag: header
+    language: c
+    body:
+      - type: TextNode
+        content: |-
+
+          /**
+           * 
+        loc:
+          source: |-
+
+            /**
+             * 
+          start:
+            line: 1
+            column: 25
+          end:
+            line: 3
+            column: 4
+      - type: CommentElement
+        attributes:
+          - name: encoding
+            value: base64
+            quoted: '"'
+        tag: replace
+        language: pascal
+        body:
+          - type: TextNode
+            content: '2014-10-16'
+            loc:
+              source: '2014-10-16'
+              start:
+                line: 3
+                column: 33
+              end:
+                line: 3
+                column: 43
+        loc:
+          source: (*<replace encoding="base64">2014-10-16</replace>*)
+          start:
+            line: 3
+            column: 4
+          end:
+            line: 3
+            column: 55
+      - type: TextNode
+        content: |
+
+           */
+        loc:
+          source: |
+
+             */
+          start:
+            line: 3
+            column: 55
+          end:
+            line: 5
+            column: 1
+    loc:
+      source: |-
+        /*<header info="file">*/
+        /**
+         * (*<replace encoding="base64">2014-10-16</replace>*)
+         */
+        /*</header>*/
+      start:
+        line: 1
+        column: 1
+      end:
+        line: 5
+        column: 14
+  - type: TextNode
+    content: |+
+
+    loc:
+      source: |+
+
+      start:
+        line: 5
+        column: 14
+      end:
+        line: 6
+        column: 1
+loc:
+  source: |
+    /*<header info="file">*/
+    /**
+     * (*<replace encoding="base64">2014-10-16</replace>*)
+     */
+    /*</header>*/
+  start:
+    line: 1
+    column: 1
+  end:
+    line: 6
+    column: 1
