@@ -30,8 +30,8 @@ interface RightCommentTokenizer extends cbml.ContainerElement, IPosNodeTokenizer
  * CBML Parser
  * @author
   *   zswang (http://weibo.com/zswang)
-  * @version 1.0.0-alpha.3
-  * @date 2017-10-03
+  * @version 1.0.0-alpha.4
+  * @date 2017-10-04
   */
 const htmlDecodeDict = {
   'quot': '"',

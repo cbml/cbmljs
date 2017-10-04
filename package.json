@@ -1,6 +1,6 @@
 {
   "name": "cbml",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "CBML Parser",
   "homepage": "https://github.com/cbml/cbmljs",
   "author": {
@@ -21,11 +21,14 @@
     "block"
   ],
   "dependencies": {
-    "mkdirp": "^0.5.0",
+    "@types/mkdirp": "^0.5.1",
     "colors": "^1.0.3",
+    "mkdirp": "^0.5.1",
     "optimist": "^0.6.1"
   },
   "devDependencies": {
+    "@types/node": "^8.0.32",
+    "@types/optimist": "0.0.29",
     "gulp": "^3.9.1",
     "gulp-examplejs": "0.0.9",
     "gulp-jdists": "^2.0.17",

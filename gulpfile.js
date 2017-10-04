@@ -46,6 +46,14 @@ gulp.task('build', function () {
   ])
 })
 
+gulp.task('cli', function () {
+  gulp.src(`src/cli.ts`)
+    .pipe(typescript({
+      target: 'es5',
+    }))
+    .pipe(gulp.dest('lib'))
+})
+
 gulp.task('uglify', function () {
   gulp.src(`lib/${pkg.name}.js`)
     .pipe(uglify())
