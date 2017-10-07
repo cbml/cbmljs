@@ -21,16 +21,23 @@ describe('coverage', function () {
 
   it('ignore source', function () {
     var root = cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
-      ignoreSource: true,
+      source: false,
     })
     assert.equal(root.loc.source, null)
   })
 
   it('ignore location', function () {
     var root = cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
-      ignoreLocation: true,
+      loc: false,
     })
     assert.equal(root.loc, null)
+  })
+
+  it('get range', function () {
+    var root = cbml.parse('/*<cctv>*//*<cctv>*//*<cctv>*/cctv/*</cctv>*/', {
+      range: true,
+    })
+    assert.equal(String(root.range), '0,45')
   })
 
   it('empty params', function () {

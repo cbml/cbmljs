@@ -1,33 +1,35 @@
 import * as cbml from './ast'
 
-export interface ParserOptions {
-  ignoreLocation?: boolean
-  ignoreSource?: boolean
+export interface IParserOptions {
+  /**
+   * 是否获取位置信息，默认：true
+   */
+  loc?: boolean
+  /**
+   * 是否获取源代码信息，默认：true
+   */
+  source?: boolean
+  /**
+   * 是否获取代码范围信息，默认：false
+   */
+  range?: boolean
 }
 
 // 临时语法元素
-
-interface IPosNodeTokenizer extends cbml.Node {
-  startPos?: number
-  endPos?: number
-}
-
-interface IPosElementTokenizer extends IPosNodeTokenizer, cbml.Element {}
-
-interface TextNodeTokenizer extends cbml.TextNode, IPosNodeTokenizer {
+interface TextNodeTokenizer extends cbml.TextNode {
   type: 'TextNode'
 }
 
-interface LeftBlockTokenizer extends cbml.ContainerElement, IPosNodeTokenizer {
+interface LeftBlockTokenizer extends cbml.ContainerElement {
   type: 'LeftBlockTokenizer'
 }
-interface LeftCommentTokenizer extends cbml.ContainerElement, IPosNodeTokenizer {
+interface LeftCommentTokenizer extends cbml.ContainerElement {
   type: 'LeftCommentTokenizer'
 }
-interface RightBlockTokenizer extends cbml.ContainerElement, IPosNodeTokenizer {
+interface RightBlockTokenizer extends cbml.ContainerElement {
   type: 'RightBlockTokenizer'
 }
-interface RightCommentTokenizer extends cbml.ContainerElement, IPosNodeTokenizer {
+interface RightCommentTokenizer extends cbml.ContainerElement {
   type: 'RightCommentTokenizer'
 }
 
@@ -77,9 +79,9 @@ function calcPosition(code: string, pos: number): cbml.Position {
   }
 }
 
-function calcLocation(code: string, start: number, end: number, ignoreSource: boolean): cbml.SourceLocation {
+function calcLocation(code: string, start: number, end: number, source: boolean): cbml.SourceLocation {
   return {
-    source: ignoreSource ? null : code.slice(start, end),
+    source: source ? code.slice(start, end) : null,
     start: calcPosition(code, start),
     end: calcPosition(code, end),
   }
@@ -132,19 +134,18 @@ interface ScanNode {
   (token: cbml.Node)
 }
 
-function tokenizer(code: string, options: ParserOptions, scan: ScanNode) {
+function tokenizer(code: string, options: IParserOptions, scan: ScanNode) {
 
   let start = 0
   let end = 0
 
   function append(node: cbml.Node) {
-    if (options.ignoreLocation) {
+    if (!options.loc) {
       node.loc = null
     } else {
-      node.loc = calcLocation(code, start, end, options.ignoreSource)
+      node.loc = calcLocation(code, start, end, options.source)
     }
-    node['startPos'] = start
-    node['endPos'] = end
+    node.range = [start, end]
     scan(node)
     start = end
   }
@@ -331,9 +332,8 @@ function merge(code: string, parent: cbml.ContainerElement) {
       let TextNode: TextNodeTokenizer = {
         type: 'TextNode',
         loc: node.loc,
-        content: code.slice(token.startPos, token.endPos),
-        startPos: token.startPos,
-        endPos: token.endPos,
+        content: code.slice(token.range[0], token.range[1]),
+        range: token.range,
       }
       node = parent.body[i] = TextNode
       let firstChild = token.body[0]
@@ -354,25 +354,24 @@ function merge(code: string, parent: cbml.ContainerElement) {
     let nextNode = parent.body[i + 1] as TextNodeTokenizer
     if (nextNode && node.type === 'TextNode' && nextNode.type === 'TextNode') { // 合并文本
       let t = node as TextNodeTokenizer
-      nextNode.startPos = t.startPos
+      nextNode.range[0] = t.range[0]
       if (nextNode.loc) {
         nextNode.loc.start = {
           line: node.loc.start.line,
           column: node.loc.start.column,
         }
         if (nextNode.loc.source) {
-          nextNode.loc.source = code.slice(nextNode.startPos, nextNode.endPos)
+          nextNode.loc.source = code.slice(nextNode.range[0], nextNode.range[1])
         }
       }
-      nextNode.content = code.slice(nextNode.startPos, nextNode.endPos)
+      nextNode.content = code.slice(nextNode.range[0], nextNode.range[1])
       parent.body.splice(i, 1)
     }
   }
 }
 
 function clean(parent: cbml.ContainerElement) {
-  delete parent['startPos']
-  delete parent['endPos']
+  delete parent.range
   if (!parent.body) {
     return
   }
@@ -381,14 +380,17 @@ function clean(parent: cbml.ContainerElement) {
   })
 }
 
-export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
+export function parse(code: string, options?: IParserOptions): cbml.CBMLElement {
   if (code === null || code === undefined) {
     return null
   }
   options = options || {}
+  options.loc = options.loc === undefined ? true : options.loc
+  options.source = options.source === undefined ? true : options.source
+  options.range = options.range === undefined ? false : options.range
   code = String(code)
 
-  let loc: cbml.SourceLocation = options.ignoreLocation ? null : calcLocation(code, 0, code.length, options.ignoreSource)
+  let loc: cbml.SourceLocation = options.loc ? calcLocation(code, 0, code.length, options.source) : null
   let result: cbml.CBMLElement = {
     language: 'cbml',
     tag: '#cbml',
@@ -396,6 +398,7 @@ export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
     type: 'CBMLElement',
     body: [],
     loc: loc,
+    range: [0, code.length],
   }
   if (!code) {
     return result
@@ -409,7 +412,7 @@ export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
       case 'VoidElement':
       case 'TextNode':
         current.body.push(token)
-        current['endPos'] = token['endPos']
+        current.range[1] = token.range[1]
         break
       case 'LeftBlockTokenizer':
       case 'LeftCommentTokenizer':
@@ -423,7 +426,7 @@ export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
       case 'RightCommentTokenizer':
         let tokenizer = token as RightBlockTokenizer
         for (let i = lefts.length - 1; ; i--) {
-          let curr = lefts[i] as IPosElementTokenizer
+          let curr = lefts[i] as cbml.ContainerElement
           let prev = lefts[i - 1]
           if (!curr) {
             throw `No start tag. (${tokenizer.tag})`
@@ -437,14 +440,14 @@ export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
             } else {
               curr.type = 'CommentElement'
             }
-            curr.endPos = tokenizer.endPos
+            curr.range[1] = tokenizer.range[1]
             if (curr.loc) {
               curr.loc.end = {
                 line: tokenizer.loc.end.line,
                 column: tokenizer.loc.end.column,
               }
               if (curr.loc.source) {
-                curr.loc.source = code.slice(curr.startPos, curr.endPos)
+                curr.loc.source = code.slice(curr.range[0], curr.range[1])
               }
             }
 
@@ -463,10 +466,9 @@ export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
             // replace tokenizer
             lefts[i] = {
               type: 'TextNode',
-              content: code.slice(tokenizer.startPos, tokenizer.endPos),
+              content: code.slice(tokenizer.range[0], tokenizer.range[1]),
               loc: tokenizer.loc,
-              startPos: tokenizer.startPos,
-              endPos: tokenizer.endPos,
+              range: tokenizer.range,
             } as TextNodeTokenizer
           }
         }
@@ -475,6 +477,8 @@ export function parse(code: string, options?: ParserOptions): cbml.CBMLElement {
   })
 
   merge(code, result)
-  clean(result)
+  if (!options.range) {
+    clean(result)
+  }
   return result
 }

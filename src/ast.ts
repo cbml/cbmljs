@@ -5,11 +5,15 @@ export interface Node {
   /**
    * 节点类型
    */
-  type: 'CBMLElement' | 'BlockElement' | 'CommentElement' | 'VoidElement' | 'TextNode' | string
+  type: string
+  /**
+   * 节点在代码中的范围
+   */
+  range?: [number, number]
   /**
    * 节点在源码中的位置
    */
-  loc: SourceLocation | null
+  loc?: SourceLocation | null
 }
 
 /**
