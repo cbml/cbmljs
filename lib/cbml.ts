@@ -34,10 +34,10 @@ interface RightCommentTokenizer extends cbml.ContainerElement {
  *
  * CBML Parser
  * @author
-  *   zswang (http://weibo.com/zswang)
-  * @version 1.0.0-alpha.12
-  * @date 2017-10-07
-  */
+ *  zswang (http://weibo.com/zswang)
+ * @version 1.0.0-alpha.13
+ * @date 2017-10-07
+ */
 const htmlDecodeDict = {
   'quot': '"',
   'lt': '<',

@@ -1,6 +1,6 @@
 {
   "name": "cbml",
-  "version": "1.0.0-alpha.12",
+  "version": "1.0.0-alpha.13",
   "description": "CBML Parser",
   "homepage": "https://github.com/cbml/cbmljs",
   "author": {
@@ -38,10 +38,7 @@
     "gulp-typescript": "^3.2.2",
     "gulp-uglify": "^3.0.0",
     "istanbul": "^0.3.17",
-    "jdists": "^2.2.0",
     "js-yaml": "^3.9.1",
-    "jshint": "^2.5.8",
-    "jstrs": "^0.0.1",
     "merge2": "^1.1.0",
     "mocha": "^2.0.1",
     "should": "^4.1.0",
