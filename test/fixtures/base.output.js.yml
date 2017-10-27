@@ -1,10 +1,10 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: CommentElement
-    attributes: []
+    attributes: {}
     tag: ok
     language: xml
     body:
@@ -21,7 +21,7 @@ body:
             line: 2
             column: 1
       - type: BlockElement
-        attributes: []
+        attributes: {}
         tag: jdists
         language: c
         body:
@@ -82,10 +82,10 @@ body:
         column: 1
   - type: VoidElement
     attributes:
-      - name: import
+      import:
         value: 6.js
         quoted: '"'
-      - name: line3
+      line3:
         value: ''
         quoted: ''
     tag: jdists
@@ -112,16 +112,16 @@ body:
         column: 1
   - type: BlockElement
     attributes:
-      - name: clean
+      clean:
         value: ''
         quoted: ''
-      - name: id
+      id:
         value: ttc
         quoted: ''''
-      - name: import
+      import:
         value: 5.js
         quoted: '"'
-      - name: line4
+      line4:
         value: ''
         quoted: ''
     tag: jdists
@@ -166,7 +166,7 @@ body:
         column: 1
   - type: CommentElement
     attributes:
-      - name: line7
+      line7:
         value: ''
         quoted: ''
     tag: remove
@@ -211,7 +211,7 @@ body:
         column: 1
   - type: CommentElement
     attributes:
-      - name: line10
+      line10:
         value: ''
         quoted: ''
     tag: delphi
@@ -256,7 +256,7 @@ body:
         column: 1
   - type: BlockElement
     attributes:
-      - name: line13
+      line13:
         value: 'a&b3 '
         quoted: '"'
     tag: delphi
@@ -301,7 +301,7 @@ body:
         column: 1
   - type: BlockElement
     attributes:
-      - name: line16
+      line16:
         value: ''
         quoted: ''
     tag: release
@@ -346,7 +346,7 @@ body:
         column: 1
   - type: CommentElement
     attributes:
-      - name: line19
+      line19:
         value: ''
         quoted: ''
     tag: release
@@ -396,7 +396,7 @@ body:
         column: 1
   - type: BlockElement
     attributes:
-      - name: import
+      import:
         value: line23.js
         quoted: '"'
     tag: jdists
@@ -441,7 +441,7 @@ body:
         column: 1
   - type: BlockElement
     attributes:
-      - name: import
+      import:
         value: line26.js
         quoted: '"'
     tag: jdists
@@ -463,7 +463,7 @@ body:
             column: 3
       - type: BlockElement
         attributes:
-          - name: import
+          import:
             value: line27.js
             quoted: '"'
         tag: jdists
@@ -485,7 +485,7 @@ body:
                 column: 5
           - type: BlockElement
             attributes:
-              - name: import
+              import:
                 value: line28.js
                 quoted: '"'
             tag: jdists
@@ -525,7 +525,7 @@ body:
                 column: 5
           - type: BlockElement
             attributes:
-              - name: import
+              import:
                 value: line29.js
                 quoted: '"'
             tag: jdists
@@ -622,7 +622,7 @@ body:
         line: 35
         column: 1
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: lua
     language: lua
     body:
@@ -664,7 +664,7 @@ body:
         line: 38
         column: 1
   - type: CommentElement
-    attributes: []
+    attributes: {}
     tag: lua
     language: lua
     body:

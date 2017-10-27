@@ -1,11 +1,11 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: BlockElement
     attributes:
-      - name: info
+      info:
         value: file
         quoted: '"'
     tag: header
@@ -29,7 +29,7 @@ body:
             column: 4
       - type: CommentElement
         attributes:
-          - name: encoding
+          encoding:
             value: base64
             quoted: '"'
         tag: replace

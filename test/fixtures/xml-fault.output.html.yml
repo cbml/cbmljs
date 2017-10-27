@@ -1,10 +1,10 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: cbml
     language: xml
     body:

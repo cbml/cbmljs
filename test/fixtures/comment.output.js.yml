@@ -1,11 +1,11 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: CommentElement
     attributes:
-      - name: encoding
+      encoding:
         value: quoted
         quoted: '"'
     tag: relpace
@@ -27,7 +27,7 @@ body:
             column: 1
       - type: CommentElement
         attributes:
-          - name: encoding
+          encoding:
             value: base64
             quoted: '"'
         tag: jdists

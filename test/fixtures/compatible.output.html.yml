@@ -1,6 +1,6 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: TextNode
@@ -16,7 +16,7 @@ body:
         line: 2
         column: 1
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: jdists
     language: xml
     body: []
@@ -43,7 +43,7 @@ body:
         line: 4
         column: 1
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: jdists
     language: xml
     body:
@@ -82,7 +82,7 @@ body:
         line: 7
         column: 1
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: cbml
     language: xml
     body:

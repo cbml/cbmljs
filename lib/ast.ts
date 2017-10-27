@@ -58,10 +58,6 @@ export type Language = 'xml' | 'c' | 'pascal' | 'python' | 'lua' | 'cbml'
  */
 export interface Attribute {
   /**
-   * 属性名
-   */
-  name: string
-  /**
    * 属性值
    */
   value: string
@@ -72,11 +68,18 @@ export interface Attribute {
 }
 
 /**
+ * 属性集合
+ */
+export interface Attributes {
+  [name: string]: Attribute
+}
+
+/**
  * 基础元素
  */
 export interface Element extends Node {
   tag: string
-  attributes: Attribute[]
+  attributes: Attributes
   language: Language
 }
 

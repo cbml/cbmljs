@@ -15,23 +15,42 @@ export interface IParserOptions {
   range?: boolean
 }
 
-// 临时语法元素
+// #region 临时语法元素
+/**
+ * 文本节点
+ */
 interface TextNodeTokenizer extends cbml.TextNode {
   type: 'TextNode'
 }
 
+/**
+ * 启始普通块标记
+ */
 interface LeftBlockTokenizer extends cbml.ContainerElement {
   type: 'LeftBlockTokenizer'
 }
+
+/**
+ * 启始注释块标记
+ */
 interface LeftCommentTokenizer extends cbml.ContainerElement {
   type: 'LeftCommentTokenizer'
 }
+
+/**
+ * 结束普通块标记
+ */
 interface RightBlockTokenizer extends cbml.ContainerElement {
   type: 'RightBlockTokenizer'
 }
+
+/**
+ * 结束注释块标记
+ */
 interface RightCommentTokenizer extends cbml.ContainerElement {
   type: 'RightCommentTokenizer'
 }
+// #endregion
 
 /*<jdists encoding="ejs" data="../package.json">*/
 /**
@@ -118,6 +137,11 @@ const LanguageMap = {
   }
 }
 
+/**
+ * 计算代码块属于的语言类型
+ * @param text 文本
+ * @return 返回代码块所属语言类型
+ */
 function calcLanguage(text: string): cbml.Language {
   let result
   Object.keys(LanguageMap).some((key) => {
@@ -130,15 +154,29 @@ function calcLanguage(text: string): cbml.Language {
   return result
 }
 
-interface ScanNode {
+/**
+ * 扫描函数类型
+ */
+interface IScanNodeFunction {
   (token: cbml.Node)
 }
 
-function tokenizer(code: string, options: IParserOptions, scan: ScanNode) {
+/**
+ * 扫描文本段包含 CBML 的语法元素
+ *
+ * @param code 代码段
+ * @param options 配置项
+ * @param scan 扫描函数
+ */
+function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunction) {
 
   let start = 0
   let end = 0
 
+  /**
+   * 记录代码位置信息，并添加 CBML 节点
+   * @param node CBML 节点
+   */
   function append(node: cbml.Node) {
     if (!options.loc) {
       node.loc = null
@@ -204,7 +242,7 @@ function tokenizer(code: string, options: IParserOptions, scan: ScanNode) {
 
     // 属性 // 《！--/jdists「file="1.js" clean」--》」
     // find attrs
-    let attributes: cbml.Attribute[] = []
+    let attributes: cbml.Attributes = {}
     while (true) {
       // find attrName
       match = code.slice(end).match(/^\s*([\w_]+[\w_-]*[\w_]|[\w_]+)\s*/)
@@ -213,9 +251,8 @@ function tokenizer(code: string, options: IParserOptions, scan: ScanNode) {
       }
 
       end += match[0].length
-
+      let name = match[1]
       let attribute: cbml.Attribute = {
-        name: match[1],
         value: '',
         quoted: '',
       }
@@ -237,7 +274,10 @@ function tokenizer(code: string, options: IParserOptions, scan: ScanNode) {
           break
       }
       attribute.value = decodeHTML(value)
-      attributes.push(attribute)
+
+      if (attributes[name] === undefined) {
+        attributes[name] = attribute
+      }
     }
 
     let find = LanguageMap[language].closed2
@@ -261,7 +301,8 @@ function tokenizer(code: string, options: IParserOptions, scan: ScanNode) {
 
       if (language === 'c') { // jsx
 
-        if (attributes.some((attribute) => {
+        if (Object.keys(attributes).some((name) => {
+          let attribute = attributes[name]
           return attribute.quoted === '' && /^\s*\{/.test(attribute.value)
         })) {
           match = code.slice(end).match(/^[^]*?>\*\//)
@@ -370,6 +411,11 @@ function merge(code: string, parent: cbml.ContainerElement) {
   }
 }
 
+/**
+ * 清除仅解析期使用的字段
+ *
+ * @param parent 容器节点
+ */
 function clean(parent: cbml.ContainerElement) {
   delete parent.range
   if (!parent.body) {
@@ -380,6 +426,13 @@ function clean(parent: cbml.ContainerElement) {
   })
 }
 
+/**
+ * 解析代码片段包含的 CBML 元素
+ *
+ * @param code 代码片段
+ * @param options 配置项
+ * @return 返回 CBML 元素
+ */
 export function parse(code: string, options?: IParserOptions): cbml.CBMLElement {
   if (code === null || code === undefined) {
     return null
@@ -394,7 +447,7 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
   let result: cbml.CBMLElement = {
     language: 'cbml',
     tag: '#cbml',
-    attributes: [],
+    attributes: {},
     type: 'CBMLElement',
     body: [],
     loc: loc,
@@ -481,4 +534,128 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
     clean(result)
   }
   return result
+}
+
+/**
+ * 搜索满足表达式的节点
+ *
+ * @param root 根节点
+ * @param selector 选择器表达式
+ * @example querySelector():base
+  ```js
+  var root = cbml.parse(`
+  <!~remove trigger="release">remove1</remove~>
+  <!~remove trigger="debug">remove2</remove~>
+  <!~remove trigger>remove3</remove~>
+  <!~remove>remove4</remove~>
+  `)
+
+  console.log(cbml.querySelector(root, 'remove').loc.source)
+  // > <!~remove trigger="release">remove1</remove~>
+
+  console.log(cbml.querySelector(root, 'remove[trigger]').loc.source)
+  // > <!~remove trigger="release">remove1</remove~>
+
+  console.log(cbml.querySelector(root, 'remove[trigger="debug"]').loc.source)
+  // > <!~remove trigger="debug">remove2</remove~>
+
+  console.log(cbml.querySelector(root, 'remove*').length)
+  // > 4
+
+  console.log(cbml.querySelector(root, 'remove[trigger]*').length)
+  // > 3
+
+  console.log(cbml.querySelector(root, 'remove[trigger="debug"]*').length)
+  // > 1
+  ```
+ * @example querySelector():coverage
+  ```js
+  var root = cbml.parse(`
+  <!~remove trigger="release">remove1</remove~>
+  <!~remove trigger="debug">remove2</remove~>
+  <!~remove trigger>remove3</remove~>
+  <!~remove>remove4</remove~>
+  `)
+
+  console.log(cbml.querySelector(root, 'dev'))
+  // > null
+
+  console.log(cbml.querySelector(root))
+  // > null
+
+  console.log(cbml.querySelector())
+  // > null
+  ```
+ * @example querySelector():throw
+  ```js
+  var root = cbml.parse(`
+  <!~remove trigger="release">remove1</remove~>
+  `)
+
+  cbml.querySelector(root, 'dev//1')
+  // * throw
+  ```
+ */
+export function querySelector(root: cbml.ContainerElement, selector: string): cbml.Node | cbml.Node[] {
+  if (!root || !selector) {
+    return null
+  }
+
+  let match = selector.match(/^\s*([\w_-]*)((\s*\[[\w_-]+\s*(=\s*("([^\\"]*(\\.)*)*"|'([^\\']*(\\.)*)*'|[^\[\]]*))?\])*)\s*(\*?)$/)
+  if (!match) {
+    throw `${JSON.stringify(selector)} is not a valid selector.`
+  }
+
+  let tag = match[1]
+  let all = match[10] === '*';
+  let attributes: { [name: string]: string } = {}
+
+  match[2].replace(/\s*\[([\w_-]+)\s*(=\s*("([^\\"]*(\\.)*)*"|'([^\\']*(\\.)*)*'|[^\[\]]*))?\]/g,
+    (match, name, expr, value) => {
+      if (/^['"]/.test(value)) {
+        /*jslint evil: true */
+        value = new Function('return (' + value + ');')()
+      }
+      attributes[name] = value;
+      return ''
+    }
+  )
+
+  function check(element: cbml.Element): boolean {
+    let result = false
+    if (!tag || element.tag === tag) {
+      result = Object.keys(attributes).every((name) => {
+        if (!element.attributes[name]) {
+          return false
+        }
+        if (!attributes[name] && attributes[name] !== '') {
+          return true
+        }
+        return element.attributes[name].value === attributes[name]
+      })
+    }
+    return result
+  }
+
+  let items: cbml.Element[] = []
+  function scan(element: cbml.Element): boolean {
+    if (check(element)) {
+      items.push(element)
+      return true
+    }
+    let parent = element as cbml.ContainerElement
+    if (parent.body) {
+      parent.body.some((item) => {
+        return scan(item as cbml.Element) && !all
+      })
+    }
+  }
+
+  scan(root)
+
+  if (all) {
+    return items
+  } else {
+    return items[0] || null
+  }
 }

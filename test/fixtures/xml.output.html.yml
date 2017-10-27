@@ -1,10 +1,10 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: remove
     language: xml
     body:
@@ -46,7 +46,7 @@ body:
         line: 4
         column: 1
   - type: BlockElement
-    attributes: []
+    attributes: {}
     tag: click-me
     language: xml
     body:

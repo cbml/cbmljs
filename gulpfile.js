@@ -62,7 +62,7 @@ gulp.task('uglify', function () {
 })
 
 gulp.task('example', function () {
-  return gulp.src(`lib/${pkg.name}.js`)
+  return gulp.src(`src/${pkg.name}.ts`)
     .pipe(jdists({
       trigger: 'example'
     }))
@@ -71,6 +71,8 @@ gulp.task('example', function () {
 const ${pkg.name} = require('../')
       `
     }))
+    .pipe(replace(/~/g, '--'))
+    .pipe(rename(`${pkg.name}.js`))
     .pipe(gulp.dest('test'))
 })
 

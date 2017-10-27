@@ -1,14 +1,14 @@
 language: cbml
 tag: '#cbml'
-attributes: []
+attributes: {}
 type: CBMLElement
 body:
   - type: CommentElement
     attributes:
-      - name: encoding
+      encoding:
         value: ejs
         quoted: '"'
-      - name: data
+      data:
         value: '{filename: ''hello.js''}'
         quoted: '"'
     tag: jdists
