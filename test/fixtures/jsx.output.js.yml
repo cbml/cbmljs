@@ -22,9 +22,11 @@ body:
       start:
         line: 1
         column: 1
+        offset: 0
       end:
         line: 6
         column: 8
+        offset: 192
 loc:
   source: |2-
      {/*<Checkbox
@@ -36,6 +38,8 @@ loc:
   start:
     line: 1
     column: 1
+    offset: 0
   end:
     line: 6
     column: 8
+    offset: 192

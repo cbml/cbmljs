@@ -25,9 +25,11 @@ body:
           start:
             line: 1
             column: 56
+            offset: 55
           end:
             line: 3
             column: 1
+            offset: 113
     loc:
       source: |-
         /*<jdists encoding="ejs" data="{filename: 'hello.js'}">
@@ -36,9 +38,11 @@ body:
       start:
         line: 1
         column: 1
+        offset: 0
       end:
         line: 3
         column: 12
+        offset: 124
 loc:
   source: |-
     /*<jdists encoding="ejs" data="{filename: 'hello.js'}">
@@ -47,6 +51,8 @@ loc:
   start:
     line: 1
     column: 1
+    offset: 0
   end:
     line: 3
     column: 12
+    offset: 124

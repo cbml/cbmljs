@@ -22,9 +22,11 @@ body:
           start:
             line: 1
             column: 31
+            offset: 30
           end:
             line: 3
             column: 1
+            offset: 37
       - type: CommentElement
         attributes:
           encoding:
@@ -44,9 +46,11 @@ body:
               start:
                 line: 3
                 column: 29
+                offset: 65
               end:
                 line: 5
                 column: 1
+                offset: 72
         loc:
           source: |-
             /*<jdists encoding="base64">
@@ -55,9 +59,11 @@ body:
           start:
             line: 3
             column: 1
+            offset: 37
           end:
             line: 5
             column: 12
+            offset: 83
       - type: TextNode
         content: |
 
@@ -69,9 +75,11 @@ body:
           start:
             line: 5
             column: 12
+            offset: 83
           end:
             line: 7
             column: 1
+            offset: 90
     loc:
       source: |-
         <!--relpace encoding="quoted">
@@ -84,9 +92,11 @@ body:
       start:
         line: 1
         column: 1
+        offset: 0
       end:
         line: 7
         column: 13
+        offset: 102
 loc:
   source: |-
     <!--relpace encoding="quoted">
@@ -99,6 +109,8 @@ loc:
   start:
     line: 1
     column: 1
+    offset: 0
   end:
     line: 7
     column: 13
+    offset: 102

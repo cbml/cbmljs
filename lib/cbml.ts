@@ -1,4 +1,5 @@
-import * as cbml from './ast'
+import * as ast from 'cbml-ast'
+export { ast }
 export interface IParserOptions {
   /**
    * 是否获取位置信息，默认：true
@@ -17,31 +18,31 @@ export interface IParserOptions {
 /**
  * 文本节点
  */
-interface TextNodeTokenizer extends cbml.TextNode {
+interface TextNodeTokenizer extends ast.TextNode {
   type: 'TextNode'
 }
 /**
  * 启始普通块标记
  */
-interface LeftBlockTokenizer extends cbml.ContainerElement {
+interface LeftBlockTokenizer extends ast.ContainerElement {
   type: 'LeftBlockTokenizer'
 }
 /**
  * 启始注释块标记
  */
-interface LeftCommentTokenizer extends cbml.ContainerElement {
+interface LeftCommentTokenizer extends ast.ContainerElement {
   type: 'LeftCommentTokenizer'
 }
 /**
  * 结束普通块标记
  */
-interface RightBlockTokenizer extends cbml.ContainerElement {
+interface RightBlockTokenizer extends ast.ContainerElement {
   type: 'RightBlockTokenizer'
 }
 /**
  * 结束注释块标记
  */
-interface RightCommentTokenizer extends cbml.ContainerElement {
+interface RightCommentTokenizer extends ast.ContainerElement {
   type: 'RightCommentTokenizer'
 }
 // #endregion
@@ -51,34 +52,63 @@ interface RightCommentTokenizer extends cbml.ContainerElement {
  * CBML Parser
  * @author
  *  zswang (http://weibo.com/zswang)
- * @version 1.0.0-alpha.33
- * @date 2017-10-27
+ * @version 1.0.0-alpha.38
+ * @date 2018-04-23
  */
-const htmlDecodeDict = {
-  'quot': '"',
-  'lt': '<',
-  'gt': '>',
-  'amp': '&',
-  'nbsp': '\xa0',
-}
-function decodeHTML(html: string): string {
-  return html.replace(
-    /&((quot|lt|gt|amp|nbsp)|#x([a-f\d]+)|#(\d+));/ig,
-    (all, group, key, hex, dec) => {
-      return key ? htmlDecodeDict[key.toLowerCase()] :
-        hex ? String.fromCharCode(parseInt(hex, 16)) :
-          String.fromCharCode(dec)
-    }
-  )
-}
-function calcPosition(code: string, pos: number): cbml.Position {
-  let buffer = code.slice(0, pos).split('\n')
+    /*<function name="decodeHTML">*/
+    /**
+     * html编码转换字典
+     */
+    var htmlDecodeDict = {
+        'quot': '"',
+        'lt': '<',
+        'gt': '>',
+        'amp': '&',
+        'nbsp': '\u00a0',
+    };
+    /**
+     * HTML解码
+     *
+     * @param html
+     * @example decodeHTML():base
+      ```js
+      console.log(jstrs.decodeHTML('&#39;1&#39;&nbsp;&lt;&nbsp;&#34;2&quot;'))
+      // > '1' < "2"
+      ```
+      * @example decodeHTML():hex
+      ```js
+      console.log(jstrs.decodeHTML('&#x33;&#x34;&#97;'))
+      // > 34a
+      ```
+      */
+    function decodeHTML(html) {
+        return html.replace(/&((quot|lt|gt|amp|nbsp)|#x([a-f\d]+)|#(\d+));/ig, function () {
+            var params = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                params[_i] = arguments[_i];
+            }
+            var key = params[2];
+            var hex = params[3];
+            var dec = params[4];
+            return key ? htmlDecodeDict[key.toLowerCase()] :
+                hex ? String.fromCharCode(parseInt(hex, 16)) :
+                    String.fromCharCode(+dec);
+        });
+    } /*</function>*/
+function calcPosition(code: string, offset: number): ast.Position {
+  let buffer = code.slice(0, offset).split('\n')
   return {
     line: buffer.length,
     column: buffer[buffer.length - 1].length + 1,
+    offset: offset,
   }
 }
-function calcLocation(code: string, start: number, end: number, source: boolean): cbml.SourceLocation {
+function calcLocation(
+  code: string,
+  start: number,
+  end: number,
+  source: boolean
+): ast.SourceLocation {
   return {
     source: source ? code.slice(start, end) : null,
     start: calcPosition(code, start),
@@ -113,16 +143,16 @@ const LanguageMap = {
     pattern: ['--[[<', '>]]'],
     closed: /^\s*(\/?>\]\])/,
     closed2: /^\s*(\/?>\]\]|>)/,
-  }
+  },
 }
 /**
  * 计算代码块属于的语言类型
  * @param text 文本
  * @return 返回代码块所属语言类型
  */
-function calcLanguage(text: string): cbml.Language {
+function calcLanguage(text: string): ast.Language {
   let result
-  Object.keys(LanguageMap).some((key) => {
+  Object.keys(LanguageMap).some(key => {
     let language = LanguageMap[key]
     if (language.pattern.indexOf(text) >= 0) {
       result = key
@@ -135,7 +165,7 @@ function calcLanguage(text: string): cbml.Language {
  * 扫描函数类型
  */
 interface IScanNodeFunction {
-  (token: cbml.Node)
+  (token: ast.Node)
 }
 /**
  * 扫描文本段包含 CBML 的语法元素
@@ -144,14 +174,18 @@ interface IScanNodeFunction {
  * @param options 配置项
  * @param scan 扫描函数
  */
-function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunction) {
+function tokenizer(
+  code: string,
+  options: IParserOptions,
+  scan: IScanNodeFunction
+) {
   let start = 0
   let end = 0
   /**
    * 记录代码位置信息，并添加 CBML 节点
    * @param node CBML 节点
    */
-  function append(node: cbml.Node) {
+  function append(node: ast.Node) {
     if (!options.loc) {
       node.loc = null
     } else {
@@ -162,9 +196,11 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
     start = end
   }
   while (start < code.length) {
-    let match = code.slice(start).match(
-      /(<!--|\/\*<|\(\*<|'''<|--\[\[<)(\/?)([\w_]+[\w_-]*[\w_]|[\w_]+)\s*|(<\/)([\w_]+[\w_-]*[\w_]|[\w_]+)(>\*\/|>\*\)|>'''|>\]\]|-->)/
-    )
+    let match = code
+      .slice(start)
+      .match(
+        /(<!--|\/\*<|\(\*<|'''<|--\[\[<)(\/?)([\w_]+[\w_-]*[\w_]|[\w_]+)\s*|(<\/)([\w_]+[\w_-]*[\w_]|[\w_]+)(>\*\/|>\*\)|>'''|>\]\]|-->)/
+      )
     // 没有 CBML 元素
     end = match ? start + match.index : code.length
     if (end > start) {
@@ -191,12 +227,15 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
       continue
     }
     let language = calcLanguage(match[1])
-    if (match[2] === '/') { // 闭合便签 // 《！--「/」jdists--》
+    if (match[2] === '/') {
+      // 闭合便签 // 《！--「/」jdists--》
       let find = LanguageMap[language].closed
       match = code.slice(end).match(find) // 《！--/jdists「--》」
       if (!match) {
         let pos = calcPosition(code, end)
-        throw `Uncaught SyntaxError: Can't match ${find}. (line: ${pos.line}, col: ${pos.column})`
+        throw `Uncaught SyntaxError: Can't match ${find}. (line: ${
+          pos.line
+        }, col: ${pos.column})`
       }
       end += match[0].length
       append({
@@ -209,7 +248,7 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
     }
     // 属性 // 《！--/jdists「file="1.js" clean」--》」
     // find attrs
-    let attributes: cbml.Attributes = {}
+    let attributes: ast.Attributes = {}
     while (true) {
       // find attrName
       match = code.slice(end).match(/^\s*([\w_]+[\w_-]*[\w_]|[\w_]+)\s*/)
@@ -218,13 +257,15 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
       }
       end += match[0].length
       let name = match[1]
-      let attribute: cbml.Attribute = {
+      let attribute: ast.Attribute = {
         value: '',
         quoted: '',
       }
       let value = ''
       // find attrValue
-      match = code.slice(end).match(/^\s*=\s*('([^']*)'|"([^"]*)"|([^'"\s\/>]+))\s*/)
+      match = code
+        .slice(end)
+        .match(/^\s*=\s*('([^']*)'|"([^"]*)"|([^'"\s\/>]+))\s*/)
       if (match) {
         end += match[0].length
         value = match[1]
@@ -244,7 +285,8 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
     let find = LanguageMap[language].closed2
     match = code.slice(end).match(find)
     if (!match) {
-      if (language === 'xml') { // xml 则宽松一些 // <!~1. line<br>~>
+      if (language === 'xml') {
+        // xml 则宽松一些 // <!~1. line<br>~>
         match = code.slice(end).match(/^[^]*?-->/)
         if (match) {
           end += match[0].length
@@ -258,11 +300,14 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
         } as TextNodeTokenizer)
         continue
       }
-      if (language === 'c') { // jsx
-        if (Object.keys(attributes).some((name) => {
-          let attribute = attributes[name]
-          return attribute.quoted === '' && /^\s*\{/.test(attribute.value)
-        })) {
+      if (language === 'c') {
+        // jsx
+        if (
+          Object.keys(attributes).some(name => {
+            let attribute = attributes[name]
+            return attribute.quoted === '' && /^\s*\{/.test(attribute.value)
+          })
+        ) {
           match = code.slice(end).match(/^[^]*?>\*\//)
           if (match) {
             end += match[0].length
@@ -278,11 +323,14 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
         }
       }
       let pos = calcPosition(code, end)
-      throw `Uncaught SyntaxError: Can't match ${find}. (line: ${pos.line}, col: ${pos.column})`
+      throw `Uncaught SyntaxError: Can't match ${find}. (line: ${
+        pos.line
+      }, col: ${pos.column})`
     }
     end += match[0].length
-    let element: cbml.Element
-    if (match[1] === '>') { // 需要闭合 // 《！--/jdists》...《/jdists--》」
+    let element: ast.Element
+    if (match[1] === '>') {
+      // 需要闭合 // 《！--/jdists》...《/jdists--》」
       element = {
         type: 'LeftCommentTokenizer',
         attributes: attributes,
@@ -290,14 +338,13 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
         language: language,
         body: [],
       } as LeftCommentTokenizer
-    }
-    else if (match[1][0] === '/') {
+    } else if (match[1][0] === '/') {
       element = {
         type: 'VoidElement',
         attributes: attributes,
         tag: tag,
         language: language,
-      } as cbml.VoidElement
+      } as ast.VoidElement
     } else {
       element = {
         type: 'LeftBlockTokenizer',
@@ -316,15 +363,17 @@ function tokenizer(code: string, options: IParserOptions, scan: IScanNodeFunctio
  * @param code 当前代码
  * @param body 父节点
  */
-function merge(code: string, parent: cbml.ContainerElement) {
+function merge(code: string, parent: ast.ContainerElement) {
   if (!parent || !parent.body) {
     return
   }
   for (let i = parent.body.length - 1; i >= 0; i--) {
     let node = parent.body[i]
-    let container = node as cbml.ContainerElement
+    let container = node as ast.ContainerElement
     merge(code, container)
-    if (['LeftBlockTokenizer', 'LeftCommentTokenizer'].indexOf(node.type) >= 0) {
+    if (
+      ['LeftBlockTokenizer', 'LeftCommentTokenizer'].indexOf(node.type) >= 0
+    ) {
       let token = node as LeftBlockTokenizer
       let TextNode: TextNodeTokenizer = {
         type: 'TextNode',
@@ -340,6 +389,7 @@ function merge(code: string, parent: cbml.ContainerElement) {
           node.loc.end = {
             line: firstChild.loc.start.line,
             column: firstChild.loc.start.column,
+            offset: firstChild.loc.start.offset,
           }
         }
         let params = [i + 1, 0]
@@ -348,13 +398,15 @@ function merge(code: string, parent: cbml.ContainerElement) {
       }
     }
     let nextNode = parent.body[i + 1] as TextNodeTokenizer
-    if (nextNode && node.type === 'TextNode' && nextNode.type === 'TextNode') { // 合并文本
+    if (nextNode && node.type === 'TextNode' && nextNode.type === 'TextNode') {
+      // 合并文本
       let t = node as TextNodeTokenizer
       nextNode.range[0] = t.range[0]
       if (nextNode.loc) {
         nextNode.loc.start = {
           line: node.loc.start.line,
           column: node.loc.start.column,
+          offset: node.loc.start.offset,
         }
         if (nextNode.loc.source) {
           nextNode.loc.source = code.slice(nextNode.range[0], nextNode.range[1])
@@ -370,13 +422,13 @@ function merge(code: string, parent: cbml.ContainerElement) {
  *
  * @param parent 容器节点
  */
-function clean(parent: cbml.ContainerElement) {
+function clean(parent: ast.ContainerElement) {
   delete parent.range
   if (!parent.body) {
     return
   }
-  parent.body.forEach((node) => {
-    clean(node as cbml.ContainerElement)
+  parent.body.forEach(node => {
+    clean(node as ast.ContainerElement)
   })
 }
 /**
@@ -386,7 +438,7 @@ function clean(parent: cbml.ContainerElement) {
  * @param options 配置项
  * @return 返回 CBML 元素
  */
-export function parse(code: string, options?: IParserOptions): cbml.CBMLElement {
+export function parse(code: string, options?: IParserOptions): ast.CBMLElement {
   if (code === null || code === undefined) {
     return null
   }
@@ -395,8 +447,10 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
   options.source = options.source === undefined ? true : options.source
   options.range = options.range === undefined ? false : options.range
   code = String(code)
-  let loc: cbml.SourceLocation = options.loc ? calcLocation(code, 0, code.length, options.source) : null
-  let result: cbml.CBMLElement = {
+  let loc: ast.SourceLocation = options.loc
+    ? calcLocation(code, 0, code.length, options.source)
+    : null
+  let result: ast.CBMLElement = {
     language: 'cbml',
     tag: '#cbml',
     attributes: {},
@@ -408,9 +462,9 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
   if (!code) {
     return result
   }
-  let lefts: cbml.Node[] = [] // 左边标签集合，用于寻找配对的右边标签
-  let current: cbml.ContainerElement = result // 当前容器
-  tokenizer(code, options, (token: cbml.Node) => {
+  let lefts: ast.Node[] = [] // 左边标签集合，用于寻找配对的右边标签
+  let current: ast.ContainerElement = result // 当前容器
+  tokenizer(code, options, (token: ast.Node) => {
     switch (token.type) {
       case 'VoidElement':
       case 'TextNode':
@@ -428,13 +482,16 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
       case 'RightCommentTokenizer':
         let tokenizer = token as RightBlockTokenizer
         for (let i = lefts.length - 1; ; i--) {
-          let curr = lefts[i] as cbml.ContainerElement
+          let curr = lefts[i] as ast.ContainerElement
           let prev = lefts[i - 1]
           if (!curr) {
             throw `No start tag. (${tokenizer.tag})`
           }
-          if (curr.tag == tokenizer.tag && curr.language == tokenizer.language &&
-            curr.type.slice('Left'.length) === token.type.slice('Right'.length)) {
+          if (
+            curr.tag == tokenizer.tag &&
+            curr.language == tokenizer.language &&
+            curr.type.slice('Left'.length) === token.type.slice('Right'.length)
+          ) {
             // 匹配
             if (token.type === 'RightBlockTokenizer') {
               curr.type = 'BlockElement'
@@ -446,15 +503,15 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
               curr.loc.end = {
                 line: tokenizer.loc.end.line,
                 column: tokenizer.loc.end.column,
+                offset: tokenizer.loc.end.offset,
               }
               if (curr.loc.source) {
                 curr.loc.source = code.slice(curr.range[0], curr.range[1])
               }
             }
             if (prev) {
-              current = prev as cbml.ContainerElement
-            }
-            else {
+              current = prev as ast.ContainerElement
+            } else {
               current = result
             }
             lefts = lefts.slice(0, i)
@@ -530,31 +587,37 @@ export function parse(code: string, options?: IParserOptions): cbml.CBMLElement 
   // * throw
   ```
  */
-export function querySelector(root: cbml.ContainerElement, selector: string): cbml.Node | cbml.Node[] {
+export function querySelector(
+  root: ast.ContainerElement,
+  selector: string
+): ast.Node | ast.Node[] {
   if (!root || !selector) {
     return null
   }
-  let match = selector.match(/^\s*([\w_-]*)((\s*\[[\w_-]+\s*(=\s*("([^\\"]*(\\.)*)*"|'([^\\']*(\\.)*)*'|[^\[\]]*))?\])*)\s*(\*?)$/)
+  let match = selector.match(
+    /^\s*([\w_-]*)((\s*\[[\w_-]+\s*(=\s*("([^\\"]*(\\.)*)*"|'([^\\']*(\\.)*)*'|[^\[\]]*))?\])*)\s*(\*?)$/
+  )
   if (!match) {
     throw `${JSON.stringify(selector)} is not a valid selector.`
   }
   let tag = match[1]
-  let all = match[10] === '*';
+  let all = match[10] === '*'
   let attributes: { [name: string]: string } = {}
-  match[2].replace(/\s*\[([\w_-]+)\s*(=\s*("([^\\"]*(\\.)*)*"|'([^\\']*(\\.)*)*'|[^\[\]]*))?\]/g,
+  match[2].replace(
+    /\s*\[([\w_-]+)\s*(=\s*("([^\\"]*(\\.)*)*"|'([^\\']*(\\.)*)*'|[^\[\]]*))?\]/g,
     (match, name, expr, value) => {
       if (/^['"]/.test(value)) {
         /*jslint evil: true */
         value = new Function('return (' + value + ');')()
       }
-      attributes[name] = value;
+      attributes[name] = value
       return ''
     }
   )
-  function check(element: cbml.Element): boolean {
+  function check(element: ast.Element): boolean {
     let result = false
     if (!tag || element.tag === tag) {
-      result = Object.keys(attributes).every((name) => {
+      result = Object.keys(attributes).every(name => {
         if (!element.attributes[name]) {
           return false
         }
@@ -566,16 +629,16 @@ export function querySelector(root: cbml.ContainerElement, selector: string): cb
     }
     return result
   }
-  let items: cbml.Element[] = []
-  function scan(element: cbml.Element): boolean {
+  let items: ast.Element[] = []
+  function scan(element: ast.Element): boolean {
     if (check(element)) {
       items.push(element)
       return true
     }
-    let parent = element as cbml.ContainerElement
+    let parent = element as ast.ContainerElement
     if (parent.body) {
-      parent.body.some((item) => {
-        return scan(item as cbml.Element) && !all
+      parent.body.some(item => {
+        return scan(item as ast.Element) && !all
       })
     }
   }

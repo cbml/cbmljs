@@ -12,9 +12,11 @@ body:
       start:
         line: 1
         column: 1
+        offset: 0
       end:
         line: 2
         column: 1
+        offset: 7
   - type: BlockElement
     attributes: {}
     tag: jdists
@@ -25,9 +27,11 @@ body:
       start:
         line: 2
         column: 1
+        offset: 7
       end:
         line: 2
         column: 28
+        offset: 34
   - type: TextNode
     content: |
 
@@ -39,9 +43,11 @@ body:
       start:
         line: 2
         column: 28
+        offset: 34
       end:
         line: 4
         column: 1
+        offset: 48
   - type: BlockElement
     attributes: {}
     tag: jdists
@@ -54,17 +60,21 @@ body:
           start:
             line: 4
             column: 14
+            offset: 61
           end:
             line: 4
             column: 19
+            offset: 66
     loc:
       source: <!--jdists-->Hello<!--/jdists-->
       start:
         line: 4
         column: 1
+        offset: 48
       end:
         line: 4
         column: 33
+        offset: 80
   - type: TextNode
     content: |
 
@@ -78,9 +88,11 @@ body:
       start:
         line: 4
         column: 33
+        offset: 80
       end:
         line: 7
         column: 1
+        offset: 105
   - type: BlockElement
     attributes: {}
     tag: cbml
@@ -93,17 +105,21 @@ body:
           start:
             line: 7
             column: 12
+            offset: 116
           end:
             line: 7
             column: 18
+            offset: 122
     loc:
       source: <!--cbml-->World!<!--/cbml-->
       start:
         line: 7
         column: 1
+        offset: 105
       end:
         line: 7
         column: 30
+        offset: 134
   - type: TextNode
     loc:
       source: |-
@@ -112,9 +128,11 @@ body:
       start:
         line: 7
         column: 30
+        offset: 134
       end:
         line: 8
         column: 13
+        offset: 147
     content: |-
 
       <!--bower-->
@@ -131,6 +149,8 @@ loc:
   start:
     line: 1
     column: 1
+    offset: 0
   end:
     line: 8
     column: 13
+    offset: 147

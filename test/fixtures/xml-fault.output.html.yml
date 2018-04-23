@@ -21,9 +21,11 @@ body:
           start:
             line: 1
             column: 12
+            offset: 11
           end:
             line: 4
             column: 1
+            offset: 58
     loc:
       source: |-
         <!--cbml-->
@@ -33,9 +35,11 @@ body:
       start:
         line: 1
         column: 1
+        offset: 0
       end:
         line: 4
         column: 13
+        offset: 70
 loc:
   source: |-
     <!--cbml-->
@@ -45,6 +49,8 @@ loc:
   start:
     line: 1
     column: 1
+    offset: 0
   end:
     line: 4
     column: 13
+    offset: 70

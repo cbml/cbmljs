@@ -1,4 +1,5 @@
-import * as cbml from './ast';
+import * as ast from 'cbml-ast';
+export { ast };
 export interface IParserOptions {
     /**
      * 是否获取位置信息，默认：true
@@ -20,7 +21,7 @@ export interface IParserOptions {
  * @param options 配置项
  * @return 返回 CBML 元素
  */
-export declare function parse(code: string, options?: IParserOptions): cbml.CBMLElement;
+export declare function parse(code: string, options?: IParserOptions): ast.CBMLElement;
 /**
  * 搜索满足表达式的节点
  *
@@ -71,4 +72,4 @@ export declare function parse(code: string, options?: IParserOptions): cbml.CBML
   // * throw
   ```
  */
-export declare function querySelector(root: cbml.ContainerElement, selector: string): cbml.Node | cbml.Node[];
+export declare function querySelector(root: ast.ContainerElement, selector: string): ast.Node | ast.Node[];

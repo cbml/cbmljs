@@ -17,9 +17,11 @@ body:
           start:
             line: 1
             column: 8
+            offset: 7
           end:
             line: 2
             column: 1
+            offset: 13
       - type: BlockElement
         attributes: {}
         tag: jdists
@@ -32,17 +34,21 @@ body:
               start:
                 line: 2
                 column: 13
+                offset: 25
               end:
                 line: 2
                 column: 20
+                offset: 32
         loc:
           source: /*<jdists>*/line1.2/*</jdists>*/
           start:
             line: 2
             column: 1
+            offset: 13
           end:
             line: 2
             column: 33
+            offset: 45
       - type: TextNode
         content: |-
 
@@ -54,9 +60,11 @@ body:
           start:
             line: 2
             column: 33
+            offset: 45
           end:
             line: 3
             column: 6
+            offset: 51
     loc:
       source: |-
         <!--ok>line1
@@ -65,9 +73,11 @@ body:
       start:
         line: 1
         column: 1
+        offset: 0
       end:
         line: 3
         column: 13
+        offset: 58
   - type: TextNode
     content: |+
 
@@ -77,9 +87,11 @@ body:
       start:
         line: 3
         column: 13
+        offset: 58
       end:
         line: 4
         column: 1
+        offset: 59
   - type: VoidElement
     attributes:
       import:
@@ -95,9 +107,11 @@ body:
       start:
         line: 4
         column: 1
+        offset: 59
       end:
         line: 4
         column: 35
+        offset: 93
   - type: TextNode
     content: |+
 
@@ -107,9 +121,11 @@ body:
       start:
         line: 4
         column: 35
+        offset: 93
       end:
         line: 5
         column: 1
+        offset: 94
   - type: BlockElement
     attributes:
       clean:
@@ -138,9 +154,11 @@ body:
           start:
             line: 5
             column: 48
+            offset: 141
           end:
             line: 7
             column: 1
+            offset: 162
     loc:
       source: |-
         /*<jdists clean id='ttc' import="5.js" line4>*/
@@ -149,9 +167,11 @@ body:
       start:
         line: 5
         column: 1
+        offset: 94
       end:
         line: 7
         column: 14
+        offset: 175
   - type: TextNode
     content: |+
 
@@ -161,9 +181,11 @@ body:
       start:
         line: 7
         column: 14
+        offset: 175
       end:
         line: 8
         column: 1
+        offset: 176
   - type: CommentElement
     attributes:
       line7:
@@ -183,9 +205,11 @@ body:
           start:
             line: 8
             column: 17
+            offset: 192
           end:
             line: 10
             column: 1
+            offset: 213
     loc:
       source: |-
         /*<remove line7>
@@ -194,9 +218,11 @@ body:
       start:
         line: 8
         column: 1
+        offset: 176
       end:
         line: 10
         column: 12
+        offset: 224
   - type: TextNode
     content: |+
 
@@ -206,9 +232,11 @@ body:
       start:
         line: 10
         column: 12
+        offset: 224
       end:
         line: 11
         column: 1
+        offset: 225
   - type: CommentElement
     attributes:
       line10:
@@ -228,9 +256,11 @@ body:
           start:
             line: 11
             column: 18
+            offset: 242
           end:
             line: 13
             column: 1
+            offset: 264
     loc:
       source: |-
         (*<delphi line10>
@@ -239,9 +269,11 @@ body:
       start:
         line: 11
         column: 1
+        offset: 225
       end:
         line: 13
         column: 12
+        offset: 275
   - type: TextNode
     content: |+
 
@@ -251,9 +283,11 @@ body:
       start:
         line: 13
         column: 12
+        offset: 275
       end:
         line: 14
         column: 1
+        offset: 276
   - type: BlockElement
     attributes:
       line13:
@@ -273,9 +307,11 @@ body:
           start:
             line: 14
             column: 41
+            offset: 316
           end:
             line: 16
             column: 1
+            offset: 338
     loc:
       source: |-
         (*<delphi line13="a&amp;b&#x33;&#32;">*)
@@ -284,9 +320,11 @@ body:
       start:
         line: 14
         column: 1
+        offset: 276
       end:
         line: 16
         column: 14
+        offset: 351
   - type: TextNode
     content: |+
 
@@ -296,9 +334,11 @@ body:
       start:
         line: 16
         column: 14
+        offset: 351
       end:
         line: 17
         column: 1
+        offset: 352
   - type: BlockElement
     attributes:
       line16:
@@ -318,9 +358,11 @@ body:
           start:
             line: 17
             column: 23
+            offset: 374
           end:
             line: 19
             column: 1
+            offset: 382
     loc:
       source: |-
         '''<release line16>'''
@@ -329,9 +371,11 @@ body:
       start:
         line: 17
         column: 1
+        offset: 352
       end:
         line: 19
         column: 17
+        offset: 398
   - type: TextNode
     content: |+
 
@@ -341,9 +385,11 @@ body:
       start:
         line: 19
         column: 17
+        offset: 398
       end:
         line: 20
         column: 1
+        offset: 399
   - type: CommentElement
     attributes:
       line19:
@@ -367,9 +413,11 @@ body:
           start:
             line: 20
             column: 20
+            offset: 418
           end:
             line: 23
             column: 7
+            offset: 462
     loc:
       source: |-
         '''<release line19>
@@ -379,9 +427,11 @@ body:
       start:
         line: 20
         column: 1
+        offset: 399
       end:
         line: 23
         column: 20
+        offset: 475
   - type: TextNode
     content: |+
 
@@ -391,9 +441,11 @@ body:
       start:
         line: 23
         column: 20
+        offset: 475
       end:
         line: 24
         column: 1
+        offset: 476
   - type: BlockElement
     attributes:
       import:
@@ -413,9 +465,11 @@ body:
           start:
             line: 24
             column: 32
+            offset: 507
           end:
             line: 26
             column: 1
+            offset: 529
     loc:
       source: |-
         /*<jdists import="line23.js">*/
@@ -424,9 +478,11 @@ body:
       start:
         line: 24
         column: 1
+        offset: 476
       end:
         line: 26
         column: 14
+        offset: 542
   - type: TextNode
     content: |+
 
@@ -436,9 +492,11 @@ body:
       start:
         line: 26
         column: 14
+        offset: 542
       end:
         line: 27
         column: 1
+        offset: 543
   - type: BlockElement
     attributes:
       import:
@@ -458,9 +516,11 @@ body:
           start:
             line: 27
             column: 32
+            offset: 574
           end:
             line: 28
             column: 3
+            offset: 577
       - type: BlockElement
         attributes:
           import:
@@ -480,9 +540,11 @@ body:
               start:
                 line: 28
                 column: 34
+                offset: 608
               end:
                 line: 29
                 column: 5
+                offset: 613
           - type: BlockElement
             attributes:
               import:
@@ -498,17 +560,21 @@ body:
                   start:
                     line: 29
                     column: 36
+                    offset: 644
                   end:
                     line: 29
                     column: 51
+                    offset: 659
             loc:
               source: /*<jdists import="line28.js">*/console.log(4);/*</jdists>*/
               start:
                 line: 29
                 column: 5
+                offset: 613
               end:
                 line: 29
                 column: 64
+                offset: 672
           - type: TextNode
             content: |-
 
@@ -520,9 +586,11 @@ body:
               start:
                 line: 29
                 column: 64
+                offset: 672
               end:
                 line: 30
                 column: 5
+                offset: 677
           - type: BlockElement
             attributes:
               import:
@@ -538,17 +606,21 @@ body:
                   start:
                     line: 30
                     column: 36
+                    offset: 708
                   end:
                     line: 30
                     column: 51
+                    offset: 723
             loc:
               source: /*<jdists import="line29.js">*/console.log(5);/*</jdists>*/
               start:
                 line: 30
                 column: 5
+                offset: 677
               end:
                 line: 30
                 column: 64
+                offset: 736
           - type: TextNode
             content: |-
 
@@ -562,9 +634,11 @@ body:
               start:
                 line: 30
                 column: 64
+                offset: 736
               end:
                 line: 32
                 column: 3
+                offset: 764
         loc:
           source: |-
             /*<jdists import="line27.js">*/
@@ -575,9 +649,11 @@ body:
           start:
             line: 28
             column: 3
+            offset: 577
           end:
             line: 32
             column: 16
+            offset: 777
       - type: TextNode
         content: |-
 
@@ -589,9 +665,11 @@ body:
           start:
             line: 32
             column: 16
+            offset: 777
           end:
             line: 33
             column: 7
+            offset: 784
     loc:
       source: |-
         /*<jdists import="line26.js">*/
@@ -604,9 +682,11 @@ body:
       start:
         line: 27
         column: 1
+        offset: 543
       end:
         line: 33
         column: 20
+        offset: 797
   - type: TextNode
     content: |
 
@@ -618,9 +698,11 @@ body:
       start:
         line: 33
         column: 20
+        offset: 797
       end:
         line: 35
         column: 1
+        offset: 805
   - type: BlockElement
     attributes: {}
     tag: lua
@@ -637,9 +719,11 @@ body:
           start:
             line: 35
             column: 12
+            offset: 816
           end:
             line: 37
             column: 1
+            offset: 829
     loc:
       source: |-
         --[[<lua>]]
@@ -648,9 +732,11 @@ body:
       start:
         line: 35
         column: 1
+        offset: 805
       end:
         line: 37
         column: 13
+        offset: 841
   - type: TextNode
     content: |+
 
@@ -660,9 +746,11 @@ body:
       start:
         line: 37
         column: 13
+        offset: 841
       end:
         line: 38
         column: 1
+        offset: 842
   - type: CommentElement
     attributes: {}
     tag: lua
@@ -675,17 +763,21 @@ body:
           start:
             line: 38
             column: 10
+            offset: 851
           end:
             line: 38
             column: 21
+            offset: 862
     loc:
       source: '--[[<lua>line38 = {}</lua>]]'
       start:
         line: 38
         column: 1
+        offset: 842
       end:
         line: 38
         column: 29
+        offset: 870
 loc:
   source: |-
     <!--ok>line1
@@ -729,6 +821,8 @@ loc:
   start:
     line: 1
     column: 1
+    offset: 0
   end:
     line: 38
     column: 29
+    offset: 870

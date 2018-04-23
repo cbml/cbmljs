@@ -14,12 +14,6 @@ const jdists = require('gulp-jdists')
 const pkg = require('./package')
 
 gulp.task('build', function () {
-  var tsResultParserInterface = gulp.src('src/ast.ts')
-    .pipe(gulp.dest('lib'))
-    .pipe(typescript({
-      target: 'es5',
-      declaration: true,
-    }))
   var tsResultParser = gulp.src(`src/${pkg.name}.ts`)
     .pipe(jdists())
     .pipe(gulp.dest('lib'))
@@ -27,10 +21,10 @@ gulp.task('build', function () {
       target: 'es5',
       module: 'umd',
       declaration: true,
+      moduleResolution: 'node',
     }))
 
   return merge2([
-    tsResultParserInterface.dts.pipe(gulp.dest('./lib')),
     tsResultParser.dts.pipe(gulp.dest('./lib')),
     tsResultParser.js
       .pipe(replace(
@@ -63,9 +57,6 @@ gulp.task('uglify', function () {
 
 gulp.task('example', function () {
   return gulp.src(`src/${pkg.name}.ts`)
-    .pipe(jdists({
-      trigger: 'example'
-    }))
     .pipe(examplejs({
       header: `
 const ${pkg.name} = require('../')
